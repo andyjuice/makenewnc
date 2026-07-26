@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 533" role="img" aria-label="Duke campus">
+  <defs>
+    <linearGradient id="c" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#003366"/>
+      <stop offset="100%" stop-color="#001a33"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="533" fill="url(#c)"/>
+  <polygon points="200,120 280,280 120,280" fill="#ffffff" opacity="0.15"/>
+  <text x="200" y="400" fill="#a8d4ff" font-family="system-ui,sans-serif" font-size="18" font-weight="600" text-anchor="middle">Duke campus</text>
+</svg>

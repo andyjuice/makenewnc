@@ -1,0 +1,118 @@
+---
+/**
+ * CampusInstagramMenu — opens a campus picker for Instagram profiles.
+ * Used on the home CTA and footer social bar; depends on campuses.yaml via getCampuses().
+ */
+import type { Campus } from '../lib/content';
+
+interface Props {
+  campuses: Campus[];
+  variant?: 'primary' | 'footer';
+  instanceId?: string;
+}
+
+const { campuses, variant = 'primary', instanceId = 'default' } = Astro.props;
+const triggerId = `campus-ig-menu-trigger-${instanceId}`;
+const panelId = `campus-ig-menu-panel-${instanceId}`;
+const isFooter = variant === 'footer';
+---
+
+<div
+  class:list={['campus-ig-menu', { 'campus-ig-menu--footer': isFooter }]}
+  data-campus-ig-menu
+>
+  <button
+    type="button"
+    class:list={[
+      'campus-ig-menu__trigger',
+      isFooter ? 'campus-ig-menu__trigger--footer social-bar__ig' : 'gateway__ig',
+    ]}
+    aria-expanded="false"
+    aria-haspopup="menu"
+    aria-controls={panelId}
+    id={triggerId}
+  >
+    {isFooter ? 'Instagram' : 'Follow us on Instagram'}
+  </button>
+
+  <div
+    id={panelId}
+    class="campus-ig-menu__panel"
+    role="menu"
+    aria-labelledby={triggerId}
+    hidden
+  >
+    <p class="campus-ig-menu__label">Choose a campus</p>
+    <ul class="campus-ig-menu__list">
+      {campuses.map((campus) => (
+        <li>
+          <a
+            href={campus.instagram}
+            class="campus-ig-menu__option"
+            role="menuitem"
+            data-campus={campus.slug}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="campus-ig-menu__name">{campus.name}</span>
+            <span class="campus-ig-menu__city">{campus.city}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
+
+<script>
+  function closeCampusIgMenus(except?: Element) {
+    document.querySelectorAll('[data-campus-ig-menu]').forEach((root) => {
+      if (root === except) return;
+      const trigger = root.querySelector('.campus-ig-menu__trigger');
+      const panel = root.querySelector('.campus-ig-menu__panel');
+      if (!(trigger instanceof HTMLButtonElement) || !(panel instanceof HTMLElement)) return;
+      trigger.setAttribute('aria-expanded', 'false');
+      panel.setAttribute('hidden', '');
+    });
+  }
+
+  document.querySelectorAll('[data-campus-ig-menu]').forEach((root) => {
+    const trigger = root.querySelector('.campus-ig-menu__trigger');
+    const panel = root.querySelector('.campus-ig-menu__panel');
+    if (!(trigger instanceof HTMLButtonElement) || !(panel instanceof HTMLElement)) return;
+
+    function setOpen(open: boolean) {
+      if (open) closeCampusIgMenus(root);
+      trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open) {
+        panel.removeAttribute('hidden');
+      } else {
+        panel.setAttribute('hidden', '');
+      }
+    }
+
+    function isOpen() {
+      return trigger.getAttribute('aria-expanded') === 'true';
+    }
+
+    trigger.addEventListener('click', () => {
+      setOpen(!isOpen());
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!isOpen()) return;
+      const target = event.target;
+      if (target instanceof Node && !root.contains(target)) setOpen(false);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && isOpen()) {
+        setOpen(false);
+        trigger.focus();
+      }
+    });
+
+    panel.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => setOpen(false));
+    });
+  });
+</script>

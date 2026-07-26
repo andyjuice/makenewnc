@@ -1,0 +1,65 @@
+# Per-campus data — edit when launching new locations.
+# Site-wide brand/social stays in site.yaml.
+
+primarySlug: duke
+
+locationsLead: >
+  [make]new campuses across the Triangle.
+
+campuses:
+  - slug: duke
+    name: Duke
+    university: Duke University
+    city: Durham
+    status: active
+    instagram: https://www.instagram.com/nc.makenew/
+    description: >
+      Our original campus — a Duke-focused church. During the semester we meet
+      at the ADF dance studio on Broad Street (since 2017). When the semester
+      is over, we gather at each others' homes — reach out if you'd like
+      details and times.
+    address:
+      street: "721 Broad Street"
+      city: Durham
+      state: NC
+      zip: "27705"
+      note: "ADF dance studio · Down the street from Whole Foods"
+      mapsUrl: "https://goo.gl/maps/yjxDn7DZ12JVTvdS6"
+    services:
+      friday:
+        name: Fridays
+        time: "6:30 – 8 PM EST"
+        topic: TBD
+        description: >
+          Weekly talks for both non-believers and believers to explore the
+          intellectual foundations of Christianity.
+        logistics: "Dinner is provided. Vegetarian options available."
+      sunday:
+        name: Sundays
+        time: "11 AM – 12 PM EST"
+        topic: TBD
+        description: >
+          Weekly worship service for believers.
+        logistics: "Light snacks provided after service."
+
+  - slug: nc-state
+    name: NC State
+    university: North Carolina State University
+    city: Raleigh
+    status: active
+    instagram: https://www.instagram.com/ncsu.makenew/
+    description: >
+      [make]new at NC State — a college-focused campus ministry in Raleigh.
+    address: null
+    services: null
+
+  - slug: unc
+    name: UNC
+    university: UNC Chapel Hill
+    city: Chapel Hill
+    status: active
+    instagram: https://www.instagram.com/unc.makenew/
+    description: >
+      [make]new at UNC Chapel Hill — a college-focused campus ministry.
+    address: null
+    services: null

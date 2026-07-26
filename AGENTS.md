@@ -1,0 +1,47 @@
+# AGENTS.md — makenewnc.org
+
+## Purpose
+
+Astro site for [make]new church. **Instagram Gateway** is the production design at `/` with dark/light mode via header toggle.
+
+## Read first
+
+- `decisions/2026-06-13-production-design-lock.md` — locked UX decisions
+- `specs/prototype-c-evolution.md` — home, carousel, locations behavior
+- `docs/carousel.md` — home carousel images & links
+- `docs/deploy.md` — Cloudflare Pages
+
+## Editing content
+
+| What | Where |
+|------|-------|
+| Top bar / popup | `src/data/announcements.yaml` |
+| Brand, social, contact | `src/data/site.yaml` |
+| Campuses | `src/data/campuses.yaml` |
+| Hero characteristics + pillars | `content/home.md` |
+| Home carousel (images + links) | `src/data/carousel.yaml` + `public/images/carousel/` |
+| Story, beliefs, CTPT | `content/*.md` |
+
+## Commands
+
+```bash
+npm install
+npm run dev      # http://localhost:4321/
+npm run build
+```
+
+## Header
+
+- [make]new icon (not text)
+- Dark mode toggle (persists in localStorage)
+- Hamburger menu → drawer nav
+
+## Home
+
+- Side-by-side layout: cycling tagline + card-hand carousel
+- Carousel: curated images from `carousel.yaml`; optional external link on front card
+
+## Constraints
+
+- Mobile-first; tagline cycling respects `prefers-reduced-motion`
+- Legacy `/prototypes/*` URLs redirect to production routes

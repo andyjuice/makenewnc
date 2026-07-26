@@ -1,0 +1,33 @@
+---
+/**
+ * Locations index — campus picker for multi-campus ministry.
+ */
+import Site from '../../layouts/Site.astro';
+import { getCampuses, getCampusesConfig, getSite, siteLink } from '../../lib/content';
+
+const campuses = getCampuses();
+const config = getCampusesConfig();
+const site = getSite();
+---
+
+<Site title="Locations" scrollable>
+  <h1 class="page-title">Locations</h1>
+  <p class="page-lead">{config.locationsLead}</p>
+  <p class="instagram-updates-note">{site.instagramUpdatesNote}</p>
+
+  <ul class="campus-list">
+    {campuses.map((campus) => (
+      <li>
+        <a
+          href={siteLink(`/locations/${campus.slug}`)}
+          class="campus-card"
+          data-campus={campus.slug}
+        >
+          <span class="campus-card__name">{campus.name}</span>
+          <span class="campus-card__uni">{campus.university}</span>
+          <span class="campus-card__city">{campus.city}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</Site>

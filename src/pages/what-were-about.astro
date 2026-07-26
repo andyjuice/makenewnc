@@ -1,0 +1,35 @@
+---
+/**
+ * What we're about — casual practical-values page from home.md pillars.
+ */
+import Site from '../layouts/Site.astro';
+import { getHome, getSite } from '../lib/content';
+
+const home = getHome();
+const site = getSite();
+---
+
+<Site title={home.aboutTitle} scrollable>
+  <h1 class="page-title">{home.aboutTitle}</h1>
+  <p class="page-lead">{home.aboutIntro}</p>
+
+  <section id="intro" class="about-section">
+    <p class="section-label">Who we are</p>
+    <p>
+      <strong>{home.brand}</strong> — {home.tagline}
+    </p>
+  </section>
+
+  {home.pillars.map((pillar) => (
+    <section id={pillar.slug} class="about-section">
+      <p class="section-label">{pillar.title}</p>
+      <p class="about-summary">{pillar.summary}</p>
+      <p>{pillar.body}</p>
+    </section>
+  ))}
+
+  <section id="always-on" class="about-section">
+    <p class="section-label">Always on</p>
+    <p>{site.instagramPitch}</p>
+  </section>
+</Site>

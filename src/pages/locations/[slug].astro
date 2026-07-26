@@ -1,0 +1,75 @@
+---
+/**
+ * Campus detail — service times, address, and description per location.
+ */
+import Site from '../../layouts/Site.astro';
+import { getCampuses, getSite, siteLink } from '../../lib/content';
+
+export function getStaticPaths() {
+  return getCampuses().map((campus) => ({
+    params: { slug: campus.slug },
+    props: { campus },
+  }));
+}
+
+const { campus } = Astro.props;
+const site = getSite();
+const friday = campus.services?.friday;
+const sunday = campus.services?.sunday;
+---
+
+<Site title={`${campus.name} · Locations`} scrollable>
+  <a href={siteLink('/locations')} class="back-link">← All locations</a>
+
+  <h1 class="page-title">{campus.name}</h1>
+  <p class="section-label">{campus.university}</p>
+
+  <p class="page-lead">{campus.description}</p>
+
+  {campus.address && (
+    <a
+      href={campus.address.mapsUrl}
+      class="gateway__address"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {campus.address.street}, {campus.address.city} {campus.address.state}
+      {campus.address.note && ` · ${campus.address.note}`}
+    </a>
+  )}
+
+  {friday && sunday && (
+    <div class="service-blocks">
+      <div class="gateway__gathering">
+        <p class="gateway__gathering-label">Friday</p>
+        <h2 class="gateway__gathering-title">{friday.name}</h2>
+        <p class="gateway__gathering-time">{friday.time}</p>
+        <p class="service-detail">Topic: {friday.topic}</p>
+        <p class="service-detail">{friday.description}</p>
+        <p class="service-detail">{friday.logistics}</p>
+      </div>
+      <div class="gateway__gathering">
+        <p class="gateway__gathering-label">Sunday</p>
+        <h2 class="gateway__gathering-title">
+          {sunday.name}{sunday.subtitle && ` ${sunday.subtitle}`}
+        </h2>
+        <p class="gateway__gathering-time">{sunday.time}</p>
+        <p class="service-detail">Topic: {sunday.topic}</p>
+        <p class="service-detail">{sunday.description}</p>
+        <p class="service-detail">{sunday.logistics}</p>
+      </div>
+    </div>
+  )}
+
+  <p class="instagram-updates-note">{site.instagramUpdatesNote}</p>
+
+  <a
+    href={campus.instagram}
+    class="gateway__ig campus-ig-btn"
+    data-campus={campus.slug}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Follow us on Instagram
+  </a>
+</Site>

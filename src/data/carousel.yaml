@@ -1,0 +1,66 @@
+# Home carousel — hand-of-cards on the landing page.
+#
+# How to update:
+#   1. Add image files to public/images/carousel/  (jpg, png, webp, svg)
+#   2. Add or edit an entry below. Order = deck order (first card shows first).
+#
+# Fields per card:
+#   image — filename in public/images/carousel/  OR  site path starting with /
+#   alt   — short description (required; used by screen readers)
+#   link  — optional URL; when set, the front card shows an external-link button
+
+cards:
+  - image: makenew-friday.jpg
+    alt: "[make]new Friday"
+    link: https://www.instagram.com/nc.makenew
+  - image: coffee.jpg
+    alt: Coffee
+    link: https://www.instagram.com/nc.makenew
+  - image: pickleball.jpg
+    alt: Pickleball
+    link: https://www.instagram.com/nc.makenew
+  - image: waiter-skit.jpg
+    alt: Waiter skit
+    link: https://www.instagram.com/nc.makenew
+  - image: rc-cars.jpg
+    alt: RC cars
+    link: https://www.instagram.com/nc.makenew
+  - image: creme-brulee.jpg
+    alt: Crème brûlée
+    link: https://www.instagram.com/nc.makenew
+  - image: lawn-mower-skit.jpg
+    alt: Lawn mower skit
+    link: https://www.instagram.com/nc.makenew
+  - image: paint-night.jpg
+    alt: Paint night
+    link: https://www.instagram.com/nc.makenew
+  - image: thanksgiving.jpg
+    alt: Thanksgiving
+    link: https://www.instagram.com/nc.makenew
+  - image: nerf-guns.jpg
+    alt: Nerf guns
+    link: https://www.instagram.com/nc.makenew
+  - image: caprisun-for-a-flyer.jpg
+    alt: Caprisun for a flyer
+    link: https://www.instagram.com/nc.makenew
+  - image: fire-pit.jpg
+    alt: Fire pit
+    link: https://www.instagram.com/nc.makenew
+  - image: inbox-outbox.jpg
+    alt: Inbox outbox
+    link: https://www.instagram.com/nc.makenew
+  - image: labor-day-bbq.jpg
+    alt: Labor Day BBQ
+    link: https://www.instagram.com/nc.makenew
+  - image: poker-demo.jpg
+    alt: Poker demo
+    link: https://www.instagram.com/nc.makenew
+  - image: thanksgiving-2.jpg
+    alt: Thanksgiving gathering
+    link: https://www.instagram.com/nc.makenew
+  - image: soccer-film.jpg
+    alt: Soccer film
+    link: https://www.instagram.com/nc.makenew
+  - image: tote-bag.jpg
+    alt: Tote bag
+    link: https://www.instagram.com/nc.makenew

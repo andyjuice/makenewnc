@@ -1,0 +1,28 @@
+---
+import Site from '../layouts/Site.astro';
+import { getCtpt } from '../lib/content';
+
+const ctpt = getCtpt();
+---
+
+<Site title={ctpt.title} scrollable>
+  <h1 class="page-title">{ctpt.title}</h1>
+  <p class="page-lead">{ctpt.description}</p>
+  <ul class="minimal-list">
+    {ctpt.chapters.map((ch) => (
+      <li>
+        <a href={ch.url} target="_blank" rel="noopener noreferrer" class="ctpt-link">
+          {ch.title}
+        </a>
+      </li>
+    ))}
+  </ul>
+</Site>
+
+<style>
+  .ctpt-link {
+    color: var(--text, #0f172a);
+    font-weight: 600;
+    text-decoration: none;
+  }
+</style>

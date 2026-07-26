@@ -1,0 +1,19 @@
+# Toggle announcements without editing components.
+# Set enabled: false or past expires date to hide at build time.
+# Set topBar.triggerPopup: true to open the popup from the bar CTA (preview).
+
+topBar:
+  enabled: true
+  message: "Multi-campus series this month — see Locations for details"
+  link: /locations
+  linkText: "Learn more"
+  triggerPopup: false
+  expires: 2026-07-01
+
+popup:
+  enabled: true
+  message: "We're launching campuses at Duke, NC State, and UNC this fall. See Locations for details."
+  link: /locations
+  linkText: "View locations"
+  dismissible: true
+  expires: 2026-07-01

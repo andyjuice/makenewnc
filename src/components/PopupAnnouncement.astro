@@ -1,0 +1,154 @@
+---
+/**
+ * PopupAnnouncement — modal overlay for urgent news.
+ * Driven by src/data/announcements.yaml (popup.enabled).
+ * Dismiss state stored in localStorage per message hash.
+ * Listens for openMakenewPopup event (from top bar triggerPopup).
+ */
+import type { Announcements } from '../lib/content';
+import { siteLink } from '../lib/content';
+
+interface Props {
+  announcements: Announcements;
+  variant?: 'dark' | 'light';
+}
+
+const { announcements, variant = 'dark' } = Astro.props;
+const popup = announcements.popup;
+const popupId = popup.message.slice(0, 40).replace(/\s+/g, '-').toLowerCase();
+---
+
+{popup.enabled && (
+  <div
+    id="popup-announcement"
+    class={`popup popup--${variant}`}
+    data-popup-id={popupId}
+    data-dismissible={popup.dismissible ? 'true' : 'false'}
+    hidden
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="popup-title"
+  >
+    <div class="popup__backdrop" data-close></div>
+    <div class="popup__card">
+      <h2 id="popup-title" class="popup__title">Announcement</h2>
+      <p class="popup__message">{popup.message}</p>
+      <div class="popup__actions">
+        {popup.link && (
+          <a href={siteLink(popup.link)} class="popup__cta">
+            {popup.linkText ?? 'Details'}
+          </a>
+        )}
+        {popup.dismissible && (
+          <button type="button" class="popup__dismiss" data-close>
+            Dismiss
+          </button>
+        )}
+      </div>
+    </div>
+  </div>
+)}
+
+<script>
+  const el = document.getElementById('popup-announcement');
+  if (el) {
+    const id = el.dataset.popupId ?? 'default';
+    const key = `makenew-popup-${id}`;
+    const dismissible = el.dataset.dismissible === 'true';
+
+    function openPopup() {
+      el.removeAttribute('hidden');
+    }
+
+    function closePopup(persist = true) {
+      el.setAttribute('hidden', '');
+      if (dismissible && persist) localStorage.setItem(key, '1');
+    }
+
+    window.openMakenewPopup = openPopup;
+
+    if (!dismissible || !localStorage.getItem(key)) {
+      openPopup();
+    }
+
+    el.querySelectorAll('[data-close]').forEach((node) => {
+      node.addEventListener('click', () => closePopup(true));
+    });
+
+    window.addEventListener('openMakenewPopup', () => openPopup());
+  }
+</script>
+
+<style>
+  .popup {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+  }
+  .popup[hidden] { display: none; }
+  .popup__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+  }
+  .popup__card {
+    position: relative;
+    width: min(100%, 24rem);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  }
+  .popup--dark .popup__card {
+    background: #111;
+    color: #f1f1f1;
+    border: 1px solid #333;
+  }
+  .popup--light .popup__card {
+    background: #fff;
+    color: #111827;
+    border: 1px solid #e5e7eb;
+  }
+  .popup__title {
+    margin: 0 0 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .popup__message {
+    margin: 0 0 1.25rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+  .popup__actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .popup__cta {
+    padding: 0.625rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-decoration: none;
+  }
+  .popup--dark .popup__cta {
+    background: #9bff9b;
+    color: #000;
+  }
+  .popup--light .popup__cta {
+    background: #111827;
+    color: #fff;
+  }
+  .popup__dismiss {
+    padding: 0.625rem 1rem;
+    border: 1px solid currentColor;
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+    font-size: 0.875rem;
+    cursor: pointer;
+    min-height: 44px;
+  }
+</style>

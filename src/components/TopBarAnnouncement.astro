@@ -1,0 +1,89 @@
+---
+/**
+ * TopBarAnnouncement — thin news bar above the nav.
+ * Driven by src/data/announcements.yaml (topBar.enabled).
+ * When triggerPopup is true, CTA opens the popup modal instead of navigating.
+ */
+import type { Announcements } from '../lib/content';
+import { siteLink } from '../lib/content';
+
+interface Props {
+  announcements: Announcements;
+  variant?: 'dark' | 'light' | 'mint';
+}
+
+const { announcements, variant = 'dark' } = Astro.props;
+const bar = announcements.topBar;
+const popupEnabled = announcements.popup.enabled;
+const usePopupTrigger = Boolean(bar.triggerPopup && popupEnabled);
+---
+
+{bar.enabled && (
+  <div class={`top-bar top-bar--${variant}`} role="status" aria-live="polite">
+    <p class="top-bar__text">
+      {bar.message}
+      {bar.link && usePopupTrigger && (
+        <button type="button" class="top-bar__link top-bar__link-btn" data-open-popup>
+          {bar.linkText ?? 'Learn more'}
+        </button>
+      )}
+      {bar.link && !usePopupTrigger && (
+        <a href={siteLink(bar.link)} class="top-bar__link">
+          {bar.linkText ?? 'Learn more'}
+        </a>
+      )}
+    </p>
+  </div>
+)}
+
+<script>
+  document.querySelectorAll('[data-open-popup]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      window.dispatchEvent(new CustomEvent('openMakenewPopup'));
+    });
+  });
+</script>
+
+<style>
+  .top-bar {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    text-align: center;
+  }
+  .top-bar--dark {
+    background: #9bff9b;
+    color: #000;
+  }
+  .top-bar--light {
+    background: #111827;
+    color: #f9fafb;
+  }
+  .top-bar--mint {
+    background: #ecfdf5;
+    color: #065f46;
+    border-bottom: 1px solid #a7f3d0;
+  }
+  .top-bar__text {
+    margin: 0;
+  }
+  .top-bar__link {
+    margin-left: 0.5rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .top-bar__link-btn {
+    border: none;
+    background: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    min-height: 44px;
+    display: inline;
+  }
+  .top-bar--dark .top-bar__link { color: #000; }
+  .top-bar--light .top-bar__link { color: #9bff9b; }
+  .top-bar--mint .top-bar__link { color: #047857; }
+</style>

@@ -1,0 +1,37 @@
+---
+import Site from '../layouts/Site.astro';
+import GatewayTagline from '../components/GatewayTagline.astro';
+import CardHandCarousel from '../components/CardHandCarousel.astro';
+import CampusInstagramMenu from '../components/CampusInstagramMenu.astro';
+import { getHome, getCarouselCards, getCampuses } from '../lib/content';
+
+const home = getHome();
+const campuses = getCampuses();
+const carouselCards = getCarouselCards();
+const campusLabels = campuses.map(({ slug, name }) => ({ slug, name }));
+---
+
+<Site title="Home" home>
+  <Fragment slot="head">
+    {carouselCards.slice(0, 4).map((card) => (
+      <link rel="preload" as="image" href={card.imageUrl} />
+    ))}
+  </Fragment>
+  <div class="gateway">
+    <div class="gateway__hero">
+      <GatewayTagline
+        brand={home.brand}
+        characteristics={home.characteristics}
+        campuses={campusLabels}
+      />
+    </div>
+
+    <div class="gateway__media">
+      <CardHandCarousel cards={carouselCards} />
+    </div>
+
+    <div class="gateway__actions">
+      <CampusInstagramMenu campuses={campuses} instanceId="home" />
+    </div>
+  </div>
+</Site>

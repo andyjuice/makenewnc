@@ -1,0 +1,19 @@
+# Site-wide config — brand, social, contact. Campus-specific data in campuses.yaml.
+name: "[make]new"
+tagline: "church for people who don't like church"
+email: makenewchurch@gmail.com
+phone: "(919) 407-8578"
+
+social:
+  instagram: "https://www.instagram.com/nc.makenew"
+  facebook: "https://www.facebook.com/makenewfellowship"
+  youtube: "https://www.youtube.com/@ncmakenew"
+
+instagramPitch: >
+  We're a 24/7 church — we're doing all sorts of things all of the time.
+  Instagram is where we post the most up-to-date information — check there
+  for week-to-week events and what's happening each week.
+
+instagramUpdatesNote: >
+  Instagram is where we post the most up-to-date information. Check there
+  for week-to-week events, schedule changes, and what's happening each week.

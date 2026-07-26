@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 533" role="img" aria-label="Sunday worship">
+  <defs>
+    <linearGradient id="b" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2d1b4e"/>
+      <stop offset="100%" stop-color="#1a0f2e"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="533" fill="url(#b)"/>
+  <rect x="60" y="140" width="280" height="180" rx="12" fill="#e6683c" opacity="0.35"/>
+  <text x="200" y="400" fill="#f5d0c5" font-family="system-ui,sans-serif" font-size="18" font-weight="600" text-anchor="middle">Sunday worship</text>
+</svg>

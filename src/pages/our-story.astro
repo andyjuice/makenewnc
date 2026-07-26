@@ -1,0 +1,17 @@
+---
+import Site from '../layouts/Site.astro';
+import { getStory } from '../lib/content';
+
+const story = getStory();
+---
+
+<Site title="Our Story" scrollable>
+  <h1 class="page-title">{story.title}</h1>
+  <p class="page-lead">{story.teaser}</p>
+  {story.sections.map((s) => (
+    <section class="about-section">
+      <p class="section-label">{s.era}</p>
+      <p>{s.body}</p>
+    </section>
+  ))}
+</Site>
