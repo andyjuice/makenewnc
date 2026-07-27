@@ -1,0 +1,9 @@
+{
+  // Cloudflare Workers Builds deploy config for the static Astro site.
+  // CI project name must match the "name" field below.
+  "name": "makenewnc",
+  "compatibility_date": "2026-07-26",
+  "assets": {
+    "directory": "./dist"
+  }
+}
