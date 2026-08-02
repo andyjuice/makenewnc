@@ -70,6 +70,11 @@ Multi-campus ministry requires per-location address and services. `site.yaml` ke
 | Events → Locations redirect | Service times are campus-scoped |
 | Retire A/B prototypes | Reduce maintenance; redirects preserve old URLs |
 
+## Favicon
+
+Tab/home-screen icons are generated from `public/images/makenew-icon.png`.
+See `architecture/favicon.md`.
+
 ## Dependencies
 
 - `gray-matter`, `js-yaml` — content loading

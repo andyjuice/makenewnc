@@ -22,6 +22,7 @@ Astro site for [make]new church. **Instagram Gateway** is the production design 
 | Hero characteristics + pillars + FART | `content/home.md` |
 | Home carousel (images + links) | `src/data/carousel.yaml` + `public/images/carousel/` |
 | Story, beliefs, CTPT | `content/*.md` |
+| Favicon / tab icon | `public/images/makenew-icon.png` + `scripts/generate-favicons.py` (see `docs/favicon.md`) |
 
 ## Commands
 
