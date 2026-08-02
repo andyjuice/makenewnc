@@ -10,7 +10,7 @@ const story = getStory();
   <p class="page-lead">{story.teaser}</p>
   {story.sections.map((s) => (
     <section class="about-section">
-      <p class="section-label">{s.era}</p>
+      <h2 class="section-label">{s.era}</h2>
       <p>{s.body}</p>
     </section>
   ))}

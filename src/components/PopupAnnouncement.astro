@@ -30,7 +30,7 @@ const popupId = popup.message.slice(0, 40).replace(/\s+/g, '-').toLowerCase();
     aria-labelledby="popup-title"
   >
     <div class="popup__backdrop" data-close></div>
-    <div class="popup__card">
+    <div class="popup__card" tabindex="-1">
       <h2 id="popup-title" class="popup__title">Announcement</h2>
       <p class="popup__message">{popup.message}</p>
       <div class="popup__actions">
@@ -55,13 +55,50 @@ const popupId = popup.message.slice(0, 40).replace(/\s+/g, '-').toLowerCase();
     const id = el.dataset.popupId ?? 'default';
     const key = `makenew-popup-${id}`;
     const dismissible = el.dataset.dismissible === 'true';
+    const card = el.querySelector('.popup__card');
+
+    // This is a true modal (role="dialog" aria-modal="true") — while open,
+    // it must trap focus and hide the rest of the page from keyboard/screen
+    // readers, not just visually cover it. `.top-bar`/`.header`/#app-shell
+    // are this component's siblings in Site.astro, so they're addressed
+    // directly rather than via a shared wrapper (no such wrapper exists).
+    const backgroundRegions = [
+      document.querySelector('.top-bar'),
+      document.querySelector('.header'),
+      document.getElementById('app-shell'),
+    ].filter((node) => node instanceof HTMLElement);
+
+    let lastFocused = null;
+
+    function setBackgroundInert(inert) {
+      backgroundRegions.forEach((node) => {
+        if (inert) {
+          node.setAttribute('aria-hidden', 'true');
+          node.setAttribute('inert', '');
+        } else {
+          node.removeAttribute('aria-hidden');
+          node.removeAttribute('inert');
+        }
+      });
+    }
+
+    function getFocusableInPopup() {
+      return [...el.querySelectorAll('a[href], button:not([disabled])')];
+    }
 
     function openPopup() {
+      lastFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
       el.removeAttribute('hidden');
+      setBackgroundInert(true);
+      const focusable = getFocusableInPopup();
+      (focusable[0] ?? card ?? el).focus();
     }
 
     function closePopup(persist = true) {
       el.setAttribute('hidden', '');
+      setBackgroundInert(false);
+      lastFocused?.focus();
+      lastFocused = null;
       if (dismissible && persist) localStorage.setItem(key, '1');
     }
 
@@ -73,6 +110,34 @@ const popupId = popup.message.slice(0, 40).replace(/\s+/g, '-').toLowerCase();
 
     el.querySelectorAll('[data-close]').forEach((node) => {
       node.addEventListener('click', () => closePopup(true));
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (el.hasAttribute('hidden')) return;
+
+      // Matches the existing backdrop-click behavior, which already closes
+      // the popup unconditionally (see .popup__backdrop's [data-close]) —
+      // Escape stays consistent with that rather than introducing a new
+      // dismissible-only exception.
+      if (e.key === 'Escape') {
+        closePopup(true);
+        return;
+      }
+
+      if (e.key !== 'Tab') return;
+      const focusable = getFocusableInPopup();
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+
+      if (e.shiftKey && active === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
     });
 
     window.addEventListener('openMakenewPopup', () => openPopup());
@@ -127,11 +192,14 @@ const popupId = popup.message.slice(0, 40).replace(/\s+/g, '-').toLowerCase();
     flex-wrap: wrap;
   }
   .popup__cta {
+    display: inline-flex;
+    align-items: center;
     padding: 0.625rem 1rem;
     border-radius: 8px;
     font-weight: 600;
     font-size: 0.875rem;
     text-decoration: none;
+    min-height: 44px;
   }
   .popup--dark .popup__cta {
     background: #9bff9b;
