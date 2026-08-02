@@ -110,3 +110,42 @@ as an open question in `specs/about-page-fart-rework.md`.
 
 See `architecture/about-page-fart-rework.md` ("Removing 'Our values' and
 'Always on' entirely") for the full before/after.
+
+## Amendment (2026-08-02, later same day): drop em dashes from FART copy
+
+Editorial feedback: the FART intro and all four card `body` fields used em
+dashes (—) as a stylistic tic, which reads as an AI-generated writing
+pattern rather than a house style choice actually made for this site.
+Request: remove them, and rephrase the surrounding sentences so the fix
+reads like a natural rewrite rather than a mechanical find-and-replace.
+
+**Approach:** each em dash was replaced with a comma or a period (never a
+colon or semicolon substitution, to keep the fix visually distinct from
+"just swap the punctuation mark"), and the sentence around it was
+restructured where a straight swap would have produced an awkward run-on:
+
+- FART intro: split "...shape everything we do — the stuff that makes us
+  distinctly [make]new" into two sentences.
+- Faith card: em dash → period (no restructuring needed).
+- Art card: the "Art — film, music, literature... — shapes..." parenthetical
+  construction (two em dashes bracketing a list) was rewritten as two
+  sentences — the list is now its own sentence ("We mean film, music,
+  literature...") instead of an interruption mid-clause.
+- Reason card: "...dig into the hard stuff — the problem of suffering..."
+  became "...dig into the hard stuff, things like the problem of
+  suffering...", adding "things like" so the list reads as an example
+  clause instead of losing its transition when the dash was removed.
+- Technology card: em dash → comma ("...Friday productions, everything
+  from the tools on stage...").
+
+**Out of scope:** `home.cta.text` ("Come visit us — see Locations for times
+and campuses") still has an em dash. Left as-is — this field isn't rendered
+by `/what-were-about` (`src/pages/what-were-about.astro` never reads
+`home.cta`; nothing in `src/` currently renders it), so it was outside the
+"What we're about" copy this amendment was scoped to. Flagging here in case
+a future agent wires up `home.cta` and should carry this same fix over.
+
+**Follow-up:** `content/home.md` — `differentiator.intro` and all four
+`differentiator.items[].body` fields edited as above. No changes to
+`src/pages/what-were-about.astro` or `src/lib/content.ts` — this was a
+copy-only edit, the rendering/data-shape contract is unchanged.

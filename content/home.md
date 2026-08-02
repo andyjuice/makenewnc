@@ -21,26 +21,26 @@ differentiator:
   intro: |
     Yes, we know it's immature. But we have your attention now, don't we?
 
-    Despite what the title might suggest, we're not actually interested in your ability to flatulate. FART is an easy-to-remember acronym for the four things that shape everything we do — the stuff that makes us distinctly [make]new.
+    Despite what the title might suggest, we're not actually interested in your ability to flatulate. FART is an easy-to-remember acronym for the four things that shape everything we do. It's the stuff that makes us distinctly [make]new.
   items:
     - letter: F
       word: Faith
       summary: The gospel is the basis of everything we do.
       body: >
-        Okay, this one isn't revolutionary — we believe the gospel is the
+        Okay, this one isn't revolutionary. We believe the gospel is the
         foundation for everything we do. It's not one item on a list;
         everything else flows from it.
     - letter: A
       word: Art
       summary: Creativity that speaks to the human experience.
       body: >
-        Art — film, music, literature, any form of creative expression —
-        shapes people's values and speaks to something past rote reason: the
-        human experience itself, in ways words alone can't always capture.
-        That's why we engage with art from all kinds of artists, most of them
-        not Christian, as a way to share the gospel. On any given Friday,
-        expect skits, music, and film that connect the human experience to
-        the Christian worldview.
+        Art shapes people's values and speaks to something past rote reason,
+        the human experience itself, in ways words alone can't always
+        capture. We mean film, music, literature, pretty much any form of
+        creative expression. That's why we engage with art from all kinds of
+        artists, most of them not Christian, as a way to share the gospel. On
+        any given Friday, expect skits, music, and film that connect the
+        human experience to the Christian worldview.
     - letter: R
       word: Reason
       summary: College-level seriousness about faith questions.
@@ -51,8 +51,8 @@ differentiator:
         College is when a lot of people start asking the big questions for
         the first time, and "just believe" isn't a good enough answer. We
         think faith should hold up to scrutiny, so we dig into the hard
-        stuff — the problem of suffering, the historicity of the Bible,
-        whether a fine-tuned universe points to a Creator. That's
+        stuff, things like the problem of suffering, the historicity of the
+        Bible, or whether a fine-tuned universe points to a Creator. That's
         <abbr title="Apologetics: giving reasoned answers in defense of the Christian faith.">apologetics</abbr>
         in practice, and it's why we built
         <a href="/christian-themes-for-privileged-teens">CTPT</a>, our free
@@ -62,10 +62,10 @@ differentiator:
       summary: Tech-forward, and paying attention to right now.
       body: >
         We're constantly experimenting with new technology in our Friday
-        productions — from the tools on stage to how we tell a story. That
-        same curiosity extends to current events, because the gospel isn't
-        just for people in ancient Judea. It has something to say about
-        today, too.
+        productions, everything from the tools on stage to how we tell a
+        story. That same curiosity extends to current events, because the
+        gospel isn't just for people in ancient Judea. It has something to
+        say about today, too.
 characteristics:
   - id: tagline
     phrase: "is a church for people who don't like church"
