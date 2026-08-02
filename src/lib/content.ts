@@ -98,17 +98,16 @@ export type Characteristic = {
   footnote?: string;
 };
 
-export type Pillar = {
-  title: string;
-  slug: string;
-  summary: string;
-  body: string;
-};
-
 export type DifferentiatorItem = {
   letter: string;
   word: string;
   summary: string;
+  /**
+   * Extended card description. May contain trusted inline HTML (e.g. an
+   * `<abbr title="...">` definition tooltip, or a same-site `<a>` link) —
+   * content/home.md is the only writer, so what-were-about.astro renders
+   * this via `set:html` rather than escaping it as plain text.
+   */
   body: string;
 };
 
@@ -129,7 +128,6 @@ export type HomeContent = {
   aboutIntro: string;
   differentiator: Differentiator;
   characteristics: Characteristic[];
-  pillars: Pillar[];
   cta: { heading: string; text: string; link: string };
 };
 
