@@ -53,9 +53,13 @@ function isCurrentNavLink(href: string) {
     <title>{title} · {site.name}</title>
     <!--
       Favicon/touch-icon set generated (scripts/generate-favicons.py) from
-      the [make]new bars mark (public/images/makenew-icon.png), inverted to
-      black-bars-on-white — a solid black square favicon reads as an
-      unappealing "hole" in a browser tab. See decisions/2026-08-02-favicon-set.md.
+      the [make]new bars mark (public/images/makenew-icon.png). Two
+      variants: favicon.ico/-16x16/-32x32 are black bars on a truly
+      transparent background (renders correctly in modern browser tabs,
+      light or dark chrome). apple-touch-icon/icon-192/icon-512 stay black
+      bars on opaque white instead, because iOS fills transparent
+      home-screen icons with solid black. See
+      decisions/2026-08-02-favicon-set.md for the full history.
       favicon.ico covers legacy browsers; PNG variants cover modern browsers,
       iOS home-screen, and Android/PWA install prompts.
     -->
