@@ -12,10 +12,10 @@ sliding stage (`z-index: 3`) and explicit drawer link colors.
 
 ## Context
 
-First pass (same day) assumed invisible link text from WebKit compositing
-(stage layer painted over labels). User retest on iPhone Safari showed the
-real defect: the drawer panel slid **off the left edge** — only a narrow
-sliver of divider lines remained visible ("The menu goes too far left").
+First pass (same day, merged as PR #13) assumed invisible link text from WebKit
+compositing (stage layer painted over labels). User retest on iPhone Safari
+showed the real defect: the drawer panel slid **off the left edge** — only a
+narrow sliver of divider lines remained visible ("The menu goes too far left").
 
 Root cause: **`translateX(100%)` on a `right: 0` panel is unreliable in
 iOS Safari**; the open state can resolve as an off-screen negative translate,
@@ -28,7 +28,7 @@ keeps stage `calc(-1 * var(--drawer-w))` and drawer width in sync.
 1. **Left-side drawer (content pushes right).** Rejected — push-from-right
    matches the locked production pattern ("shifts page content left").
 2. **`<dialog>` / fixed overlay.** Rejected — larger UX change.
-3. **Keep percentage translate and only tweak z-index/colors.** Rejected —
+3. **Keep percentage translate and only tweak z-index/colors (PR #13).** Rejected —
    user retest proved positioning, not contrast, was broken.
 
 ## Tradeoffs

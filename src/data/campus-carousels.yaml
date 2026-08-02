@@ -1,29 +1,40 @@
 # Per-campus gallery carousels — one section per campus slug.
 # Drop images into public/images/locations/{slug}/ and list them here.
+# Order: maximize visual contrast between adjacent cards (similar scenes separated).
 
 duke:
   cards:
-    - image: placeholder-1.svg
-      alt: Duke campus gallery placeholder 1
-    - image: placeholder-2.svg
-      alt: Duke campus gallery placeholder 2
-    - image: placeholder-3.svg
-      alt: Duke campus gallery placeholder 3
+  # Outdoor lakeside → indoor stage → aquarium (large group) → kitchen → aquarium (small) → Lego
+  # Aquarium shots at positions 3 and 6 so they are not adjacent.
+    - image: duke-labor-day.jpg
+      alt: Labor Day lakeside picnic
+    - image: duke-friday.jpg
+      alt: Friday night presentation
+    - image: duke-aquarium.jpg
+      alt: Group photo at the aquarium
+    - image: duke-post.jpg
+      alt: Topo Chico cocktail night
+    - image: duke-aquarium-2.jpg
+      alt: Friends at the aquarium
+    - image: duke-lego-post.jpg
+      alt: Lego tower build night
 
 nc-state:
   cards:
-    - image: placeholder-1.svg
-      alt: NC State campus gallery placeholder 1
-    - image: placeholder-2.svg
-      alt: NC State campus gallery placeholder 2
-    - image: placeholder-3.svg
-      alt: NC State campus gallery placeholder 3
+  # Classroom lecture → outdoor night → large group event → cafe interior
+    - image: nc-state-science.JPG
+      alt: Science lecture
+    - image: nc-state-fireworks.JPG
+      alt: Fourth of July fireworks
+    - image: nc-state-activate.JPG
+      alt: Activate group photo
+    - image: nc-state-haraz.JPG
+      alt: Haraz dessert cafe
 
 unc:
   cards:
-    - image: placeholder-1.svg
-      alt: UNC campus gallery placeholder 1
-    - image: placeholder-2.svg
-      alt: UNC campus gallery placeholder 2
-    - image: placeholder-3.svg
-      alt: UNC campus gallery placeholder 3
+  # Casual cafe outing → formal lecture presentation
+    - image: unc-paris-banh-mi.JPG
+      alt: Paris Bánh Mì outing
+    - image: unc-jesus-talk.JPG
+      alt: Jesus talk presentation
