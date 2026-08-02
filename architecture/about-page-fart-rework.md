@@ -6,32 +6,39 @@ user-facing behavior this implements.
 ## Component/data map
 
 ```
-content/home.md (aboutIntro, differentiator, pillars, characteristics)
+content/home.md (aboutIntro, differentiator, characteristics)
   └── getHome() [src/lib/content.ts]
         └── src/pages/what-were-about.astro
               ├── diff.intro            → split into <p class="about-body"> paragraphs
               ├── diff.items[].summary  → <p class="about-summary"> (bold, existing global style)
-              ├── diff.items[].body     → <p class="fart-item__body" set:html={...}> (muted, smaller)
-              └── home.pillars[]        → remaining "Our values" <section>s
+              └── diff.items[].body     → <p class="fart-item__body" set:html={...}> (muted, smaller)
 
 content/home.md characteristics[].aboutAnchor
   └── src/components/GatewayTagline.astro → `${aboutPath}#${aboutAnchor}` (home page deep-links)
 ```
 
+`content/home.md` no longer has a `pillars` field — the "Our values"
+section and its three pillars were removed (see below), and the field was
+deleted from both the content file and the `HomeContent` type rather than
+left unused.
+
 ## Data flow
 
 1. `content/home.md` is the single source of truth for all About-page copy
-   (subheader, FART title/intro/items, pillars). No other file duplicates
-   this content.
+   (subheader, FART title/intro/items). No other file duplicates this
+   content.
 2. `getHome()` reads and parses the YAML front matter at build time (via
    `gray-matter`); no runtime fetch.
-3. `what-were-about.astro` renders sections in a fixed order: title →
-   subheader (`id="intro"`) → FART (`id="fart"`) → values header
-   (`id="values"`) → one `<section>` per remaining pillar → always-on.
+3. `what-were-about.astro` renders exactly two things: the title/subheader,
+   then one `<section id="fart">` containing the FART intro paragraphs and
+   the four cards. There is no "Our values" or "Always on" section anymore.
 4. The home page's cycling tagline (`GatewayTagline.astro`) builds its
    href as `/what-were-about#{aboutAnchor}` per characteristic, so any
    `id` used in `what-were-about.astro` must have a matching
    `aboutAnchor` value in `content/home.md` for the ones that link there.
+   Four of the five characteristics now point at `#fart` (or, for the
+   Reason-specific one, `#fart-reason`) since that's the only remaining
+   section — see "Removing 'Our values' and 'Always on' entirely" below.
 
 ## Why `set:html` for `DifferentiatorItem.body`
 
@@ -79,6 +86,45 @@ slightly different words, its unique details (fine-tuned universe,
 historicity of the Bible, the "just believe" framing) were folded into the
 Reason card's body, and the home-page tagline anchor that pointed at
 `#intellectual-rigor` was repointed at `#fart-reason`.
+
+## Removing "Our values" and "Always on" entirely (follow-up, same review pass)
+
+After the FART cards got real content (see above), review feedback judged
+that "Our values" (Mobility, Living life together, Sharing the Gospel) and
+"Always on" (the Instagram pitch) no longer added anything FART didn't
+already cover in more depth, and asked for them to be cut rather than
+further trimmed.
+
+**What changed:**
+
+- `content/home.md`: removed the `pillars` list entirely (all three
+  entries, not just the previously-folded "Intellectual rigor").
+- `src/lib/content.ts`: removed the now-unused `Pillar` type and the
+  `pillars` field from `HomeContent` — deleted outright rather than left as
+  dead content-model surface, since its one consumer was gone.
+- `what-were-about.astro`: removed the `<section id="values">` header, the
+  pillar-mapping loop, and the `<section id="always-on">` block (and its
+  now-unused `getSite()` import/`site` variable, since `site.instagramPitch`
+  was its only use on this page — `site.instagramPitch` itself was **not**
+  removed from `site.yaml`, since Locations pages still use it).
+- Removed the standalone large `<p class="fart-acronym">{diff.acronym}</p>`
+  display line and its `.fart-acronym` CSS — the section label ("Come FART
+  with us") already contains the word "FART," so a second, larger
+  restatement of the same four letters added visual weight without adding
+  information.
+- `content/home.md` `characteristics[]`: three entries (`mobility`,
+  `always-on`, `gospel`) had `aboutAnchor` values pointing at sections that
+  no longer exist (`mobility`, `always-on`, `sharing-the-gospel`). Repointed
+  all three to `fart` — the only section left on the page — rather than
+  leaving a dead anchor (which wouldn't error, but would silently fail to
+  scroll to anything relevant).
+
+**Why not preserve per-topic anchors another way** (e.g. point "meets in a
+dance studio" at `/locations` instead of the About page): that would change
+`GatewayTagline`'s contract from "always links within the About page" to
+"links vary per characteristic," a bigger change than this feedback round
+asked for. Flagged as an open question in
+`specs/about-page-fart-rework.md` instead of solved speculatively.
 
 ## Favicon (related, same PR)
 

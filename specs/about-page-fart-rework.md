@@ -38,56 +38,71 @@ asserted without pointing anywhere someone could actually verify it.
   reaching the human experience beyond "rote reason"; tech-forward +
   attentive to current events because the gospel applies today, not just in
   the first century).
+- (Follow-up round, same review pass) Once FART carried real content, remove
+  the sections that had become redundant with it entirely — "Our values"
+  (Mobility, Living life together, Sharing the Gospel) and "Always on" — and
+  remove the large standalone "FART" acronym display line, since the section
+  label ("Come FART with us") already names the acronym.
 
 ## Non-goals
 
-- Redesigning the "Our values" pillars (Mobility, Living life together,
-  Sharing the Gospel) beyond removing the one pillar that duplicated FART.
 - Building a new interactive tooltip component. A native `<abbr title="...">`
   is sufficient for a single inline definition — see
   `architecture/about-page-fart-rework.md` for why this was chosen over
   reusing/extending the custom tooltip in `GatewayTagline.astro`.
-- Changing the "Always on" section or the CTA content.
+- Changing the "Always on" *content* (`site.instagramPitch`) — it's removed
+  from this page's display, not deleted from `site.yaml`, since it's still
+  used on the Locations pages.
 - Changing FART's meaning/order (still Faith, Art, Reason, Technology).
+- Redirecting the home page's cycling-tagline characteristics to different
+  *pages* (e.g. Locations, Our Beliefs) to recover per-topic deep links for
+  "meets in a dance studio," "is open 24/7," and "shares the gospel." They
+  now all deep-link to `#fart` (the page's one remaining section) — see Open
+  questions.
 
 ## User-facing behavior
 
-1. **Subheader** (`home.aboutIntro`) now reads: "[make]new is church for
-   people who don't like church. Built around college life in the Triangle.
-   Open 24/7." This is the only place "who we are" is introduced on the page.
-2. **First section** after the title/subheader is FART, labeled "Come FART
+1. **Subheader** (`home.aboutIntro`) reads: "[make]new is church for people
+   who don't like church. Built around college life in the Triangle. Open
+   24/7." This is the only place "who we are" is introduced on the page.
+2. **The entire rest of the page is one section**: FART, labeled "Come FART
    with us," followed by:
-   - The acronym "FART" displayed large, with an accessible label of "Faith,
-     Art, Reason, Technology" (not spelled-out letters) for screen readers.
    - Two short context paragraphs explaining the acronym is intentionally
-     immature but purposeful.
+     immature but purposeful. (No separate large "FART" display line — the
+     section label already contains the word.)
    - Four cards (Faith, Art, Reason, Technology), each with a colored letter
      badge, a bold summary, and a smaller/muted extended description below.
 3. The Reason card's description contains an inline `apologetics` term with
    a native tooltip (hover/focus shows a one-sentence definition) and a link
    to the CTPT page.
-4. **"Our values"** section now lists only Mobility, Living life together,
-   and Sharing the Gospel — "Intellectual rigor" was removed because it
-   restated the Reason card almost word-for-word.
+4. There is no "Our values" section, no Mobility/Living life
+   together/Sharing the Gospel pillars, and no "Always on" section anymore.
+   FART is judged to already cover this ground in more depth.
 5. The home-page cycling tagline's "approaches Christianity with
-   college-level rigor" phrase now deep-links to `#fart-reason` (the FART
-   Reason card) instead of the now-removed `#intellectual-rigor` pillar.
+   college-level rigor," "meets in a dance studio," "is open 24/7," and
+   "shares the gospel" phrases all now deep-link to `#fart` (three of them
+   previously pointed at sections — Mobility, Always on, Sharing the
+   Gospel — that no longer exist; "college-level rigor" specifically lands
+   on the Reason card via `#fart-reason`, one level more precise since that
+   card still exists).
 
 ## System constraints
 
 - Content lives in `content/home.md` (YAML front matter); this page is a
   build-time render (`src/lib/content.ts` → `getHome()`), so all copy
   changes require no page-logic changes on their own.
-- `DifferentiatorItem.body` may now contain trusted inline HTML (a same-site
+- `DifferentiatorItem.body` may contain trusted inline HTML (a same-site
   `<a>` and an `<abbr title="...">`). It is rendered with Astro's `set:html`
   in `what-were-about.astro`. This is safe only because `content/home.md` is
   the sole writer of this field — it is not user-generated content.
-- Anchor IDs (`#fart-faith`, `#fart-art`, `#fart-reason`, `#fart-technology`,
-  `#mobility`, `#living-life-together`, `#sharing-the-gospel`,
-  `#always-on`, `#intro`) are linked from `GatewayTagline.astro` on the
-  home page via `characteristics[].aboutAnchor`. Renaming or removing a
+- Anchor IDs (`#fart`, `#fart-faith`, `#fart-art`, `#fart-reason`,
+  `#fart-technology`, `#intro`) are linked from `GatewayTagline.astro` on
+  the home page via `characteristics[].aboutAnchor`. Renaming or removing a
   section's `id` requires updating the matching `aboutAnchor` in
   `content/home.md`.
+- `HomeContent` no longer has a `pillars` field (`src/lib/content.ts`) — it
+  was removed along with its only consumer, rather than left as unused
+  content-model surface.
 
 ## Edge cases
 
@@ -101,6 +116,12 @@ asserted without pointing anywhere someone could actually verify it.
   by `what-were-about.astro`. If an editor writes `intro` as a single
   paragraph (no blank line), it will render as one `<p>` — that's fine, the
   split is purely additive.
+- Because "meets in a dance studio," "is open 24/7," and "shares the
+  gospel" no longer have a topic-specific anchor to land on, clicking them
+  from the home page now scrolls to the top of the FART section rather than
+  content specifically about that claim. The claims themselves are still
+  stated in the cycling tagline text (with a footnote, for mobility); the
+  About page no longer elaborates on them individually.
 
 ## Open questions
 
@@ -108,7 +129,9 @@ asserted without pointing anywhere someone could actually verify it.
   sentence, or does it need a fuller explanation elsewhere (e.g. a dedicated
   glossary)? Left as a single-sentence `<abbr>` tooltip for now; revisit if
   visitors report confusion.
-- Should "Sharing the Gospel" (pillar) be merged into FART's "Faith" card in
-  a future pass? They are related but distinct (belief foundation vs.
-  outward action) — left separate for this round per review feedback, which
-  only flagged Intellectual rigor/Reason as duplicative.
+- Now that "meets in a dance studio," "is open 24/7," and "shares the
+  gospel" all point at the generic `#fart` anchor instead of topic-specific
+  content, is that deep-link still worth keeping, or should those
+  characteristics link elsewhere (Locations, home page sections) or drop
+  the link behavior entirely? Left as-is for this round; flag if it comes
+  up in a future review pass.

@@ -1,21 +1,21 @@
 ---
 /**
- * What we're about — casual practical-values page from home.md pillars.
- * Includes the FART differentiator (Faith, Art, Reason, Technology).
+ * What we're about — the FART differentiator (Faith, Art, Reason,
+ * Technology) is now the entire content of this page.
  *
- * Structure (see specs/what-were-about.md for the full rationale):
+ * Structure (see specs/about-page-fart-rework.md for the full rationale):
  *   1. Title + subheader (subheader alone carries the "who we are" framing —
- *      there is deliberately no separate "Who we are" section anymore).
- *   2. FART — "Come FART with us": context copy, then four cards.
- *   3. Our values — the remaining pillars from home.md that FART doesn't
- *      already cover (Mobility, Living life together, Sharing the Gospel).
- *   4. Always on — Instagram pitch.
+ *      there is deliberately no separate "Who we are" section).
+ *   2. FART — "Come FART with us": context copy, then four cards. This is
+ *      deliberately the only section: the former "Our values" pillars
+ *      (Mobility, Living life together, Sharing the Gospel) and "Always on"
+ *      Instagram pitch were removed because FART already said the same
+ *      things, in more depth, per site-review feedback.
  */
 import Site from '../layouts/Site.astro';
-import { getHome, getSite } from '../lib/content';
+import { getHome } from '../lib/content';
 
 const home = getHome();
-const site = getSite();
 const diff = home.differentiator;
 
 // diff.intro is authored as one or more blank-line-separated paragraphs in
@@ -25,10 +25,6 @@ const introParagraphs = diff.intro
   .split(/\n\s*\n/)
   .map((paragraph) => paragraph.trim())
   .filter(Boolean);
-
-// Screen readers get the full word list ("Faith, Art, Reason, Technology")
-// instead of spelling out the letters, which is clearer than the acronym.
-const acronymLabel = diff.items.map((item) => item.word).join(', ');
 ---
 
 <Site title={home.aboutTitle} scrollable>
@@ -37,7 +33,6 @@ const acronymLabel = diff.items.map((item) => item.word).join(', ');
 
   <section id="fart" class="about-section">
     <p class="section-label">{diff.title}</p>
-    <p class="fart-acronym" aria-label={acronymLabel}>{diff.acronym}</p>
     {introParagraphs.map((paragraph) => (
       <p class="about-body">{paragraph}</p>
     ))}
@@ -57,33 +52,9 @@ const acronymLabel = diff.items.map((item) => item.word).join(', ');
       ))}
     </dl>
   </section>
-
-  <section id="values" class="about-section">
-    <p class="section-label">Our values</p>
-    <p class="about-summary">The practical values that shape how we live together.</p>
-  </section>
-
-  {home.pillars.map((pillar) => (
-    <section id={pillar.slug} class="about-section">
-      <p class="section-label">{pillar.title}</p>
-      <p class="about-summary">{pillar.summary}</p>
-      <p>{pillar.body}</p>
-    </section>
-  ))}
-
-  <section id="always-on" class="about-section">
-    <p class="section-label">Always on</p>
-    <p>{site.instagramPitch}</p>
-  </section>
 </Site>
 
 <style>
-  .fart-acronym {
-    margin: 0 0 1rem;
-    font-size: clamp(1.75rem, 6vw, 2.25rem);
-    font-weight: 800;
-    letter-spacing: 0.08em;
-  }
   .about-body {
     margin: 0 0 0.75rem;
     color: var(--muted);

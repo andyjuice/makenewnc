@@ -8,10 +8,11 @@ aboutTitle: "What we're about"
 aboutIntro: >
   [make]new is church for people who don't like church. Built around college
   life in the Triangle. Open 24/7.
-# FART is the "how we reach people" layer of the About page. Its four cards
-# intentionally absorbed the old standalone "Intellectual rigor" pillar (now
-# folded into Reason, below) so the page stops repeating itself — see
-# decisions/2026-08-02-about-page-fart-rework.md.
+# FART is now the entire substantive content of the About page — see
+# decisions/2026-08-02-about-page-fart-rework.md. The page used to also have
+# a standalone "Intellectual rigor" pillar (folded into Reason) and an
+# "Our values" pillars section + "Always on" Instagram pitch (removed
+# outright: FART already covers what those said, in more depth).
 differentiator:
   title: "Come FART with us"
   acronym: FART
@@ -73,7 +74,9 @@ characteristics:
   - id: mobility
     phrase: "meets in a dance studio (721 Broad St)"
     holdMs: 4000
-    aboutAnchor: mobility
+    # No dedicated "Mobility" section exists anymore (see pillars removal,
+    # below) — this deep-links to the About page's one remaining section.
+    aboutAnchor: fart
     footnote: >
       Sundays and Fridays if you're around Duke. NC State and UNC will have
       their own locations. Check Instagram for the most up-to-date week-to-week
@@ -87,32 +90,11 @@ characteristics:
   - id: always-on
     phrase: "is open 24/7"
     holdMs: 4000
-    aboutAnchor: always-on
+    aboutAnchor: fart
   - id: gospel
     phrase: "shares the gospel"
     holdMs: 4000
-    aboutAnchor: sharing-the-gospel
-pillars:
-  - title: Mobility
-    slug: mobility
-    summary: Meeting in a dance studio — or really anywhere.
-    body: >
-      We've met in Airbnbs, dorms, and outdoors. Our church isn't a set
-      address (except for tax purposes) but a community of God's people
-      worshipping together. A more practical reason for meeting in a dance
-      studio? Owning a building is expensive.
-  - title: Living life together
-    slug: living-life-together
-    summary: The Gospel has real implications for how we live.
-    body: >
-      One of the clearest pictures in the early church was selling possessions,
-      providing for one another, and living in community. We don't think
-      anything has changed.
-  - title: Sharing the Gospel
-    slug: sharing-the-gospel
-    summary: Life-saving news worth sharing.
-    body: >
-      If you had life-saving news, wouldn't you share it too?
+    aboutAnchor: fart
 cta:
   heading: "I'm sold. What's next?"
   text: Come visit us — see Locations for times and campuses.

@@ -98,13 +98,6 @@ export type Characteristic = {
   footnote?: string;
 };
 
-export type Pillar = {
-  title: string;
-  slug: string;
-  summary: string;
-  body: string;
-};
-
 export type DifferentiatorItem = {
   letter: string;
   word: string;
@@ -135,7 +128,6 @@ export type HomeContent = {
   aboutIntro: string;
   differentiator: Differentiator;
   characteristics: Characteristic[];
-  pillars: Pillar[];
   cta: { heading: string; text: string; link: string };
 };
 

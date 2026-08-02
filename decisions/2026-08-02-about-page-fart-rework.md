@@ -72,3 +72,41 @@ into the FART cards rather than deleted outright.
   `:global(abbr)`/`:global(a)` styling for the injected Reason-card markup.
 - `src/lib/content.ts`: documented that `DifferentiatorItem.body` may
   contain trusted inline HTML.
+
+## Amendment (same review pass): remove "Our values"/"Always on" and the acronym display
+
+Once the FART cards had real content (this decision's original scope),
+review feedback judged the rest of the page redundant with it and asked to
+cut it rather than trim it further, and to drop the large standalone "FART"
+acronym line under the "Come FART with us" label (the label already says
+"FART").
+
+**Additional changes:**
+
+- Removed `content/home.md`'s `pillars` list entirely (Mobility, Living
+  life together, Sharing the Gospel — not just the already-folded
+  Intellectual rigor).
+- Removed the `Pillar` type and `HomeContent.pillars` field from
+  `src/lib/content.ts` — deleted rather than left unused, since removing
+  its one consumer (the "Our values" section) made it dead content-model
+  surface.
+- Removed `<section id="values">`, the pillar-mapping loop, and
+  `<section id="always-on">` from `what-were-about.astro` (and its
+  now-unused `getSite()` import). `site.instagramPitch` itself stays in
+  `site.yaml` — Locations pages still use it.
+- Removed the standalone `<p class="fart-acronym">{diff.acronym}</p>` line
+  and its CSS.
+- Repointed the `mobility`, `always-on`, and `gospel` characteristics'
+  `aboutAnchor` (previously `mobility`, `always-on`, `sharing-the-gospel` —
+  all now-removed section ids) to `fart`, the one section left on the page.
+
+**Tradeoff accepted:** those three cycling-tagline phrases ("meets in a
+dance studio," "is open 24/7," "shares the gospel") no longer deep-link to
+topic-specific detail — they land on the top of the FART section instead.
+Considered repointing them at other pages (Locations, Our Beliefs) instead,
+but that would change `GatewayTagline`'s "always links within the About
+page" contract for a bigger scope than this feedback round asked for; left
+as an open question in `specs/about-page-fart-rework.md`.
+
+See `architecture/about-page-fart-rework.md` ("Removing 'Our values' and
+'Always on' entirely") for the full before/after.
