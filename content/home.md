@@ -16,6 +16,15 @@ aboutIntro: >
 differentiator:
   title: "Come FART with us"
   acronym: FART
+  # Promo flyer graphic (see decisions/2026-08-02-about-page-fart-rework.md,
+  # "Amendment: FART section flyer image"). Rendered by
+  # what-were-about.astro as the first thing under the "Come FART with us"
+  # heading, before the intro paragraphs.
+  image: /images/fart-flyer.jpg
+  imageAlt: >
+    "Makenew Presents: Faith Art Religion Tech" flyer graphic, with a photo
+    from a [make]new Friday and "Check us out" pointing to @nc.makenew on
+    Instagram.
   # Context copy shown once, above the four cards. Rendered as separate
   # paragraphs by src/pages/what-were-about.astro (split on blank lines).
   intro: |

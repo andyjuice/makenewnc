@@ -126,6 +126,46 @@ dance studio" at `/locations` instead of the About page): that would change
 asked for. Flagged as an open question in
 `specs/about-page-fart-rework.md` instead of solved speculatively.
 
+## FART section flyer image (follow-up, 2026-08-02)
+
+Added an optional `image`/`imageAlt` pair to the `differentiator` block in
+`content/home.md`, surfaced in `src/lib/content.ts`'s `Differentiator` type,
+and rendered by `what-were-about.astro`:
+
+```
+content/home.md differentiator.image / differentiator.imageAlt
+  └── getHome() [src/lib/content.ts] → Differentiator.image?, Differentiator.imageAlt?
+        └── what-were-about.astro
+              {diff.image && <img class="fart-flyer" src={diff.image} alt={diff.imageAlt ?? ''} ... />}
+              — rendered immediately after <h2 class="section-label"> and
+                before the intro <p> paragraphs, i.e. the first thing under
+                the "Come FART with us" heading.
+```
+
+**Why a content field instead of hardcoding the `<img>` in the template:**
+every other piece of FART-section copy already lives in `content/home.md`
+via `getHome()`; hardcoding a one-off image path directly in
+`what-were-about.astro` would create a second place editors need to know
+about to change this section, inconsistent with how the rest of the page
+is built.
+
+**Why optional (`image?`/`imageAlt?`) rather than required:** the FART
+section itself already renders correctly without an image (that was true
+before this change); making the field optional means an editor can drop
+the flyer later (or swap it out entirely) by just deleting two lines from
+YAML, with no `.astro`/`.ts` change needed either way.
+
+**Asset:** `public/images/fart-flyer.jpg` — a single static promo graphic
+(not a carousel), so it doesn't use the `carousel.yaml`/`getCarouselCards()`
+machinery built for `CardHandCarousel`; that machinery exists specifically
+for the home page's multi-card deck, which this single image isn't part of.
+
+**Styling:** `.fart-flyer` in `what-were-about.astro`'s `<style>` block
+caps the image at `max-width: 22rem`, centers it, and reuses the same
+`border: 1px solid var(--border); border-radius: 12px;` treatment already
+used by `.fart-item`, so it reads as part of the same section rather than
+an unrelated inserted graphic.
+
 ## Favicon (related, same PR)
 
 See `architecture/favicon.md` for the separate favicon/tab-icon change
