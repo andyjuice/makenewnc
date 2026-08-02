@@ -47,4 +47,10 @@ npm run build
 
 - Mobile-first; tagline cycling respects `prefers-reduced-motion` (JS-gated auto-advance) and all CSS transitions respect it too (sitewide `@media (prefers-reduced-motion: reduce)` override in `Site.astro`)
 - Legacy `/prototypes/*` URLs redirect to production routes
-- Accessibility: see `specs/accessibility-audit.md` / `architecture/accessibility-audit.md` for the drawer/popup focus-trap pattern (mirror `CampusInstagramMenu`'s mobile sheet for any new overlay/dialog), contrast-checking approach, and other audited patterns to follow for new UI
+
+## Cursor Cloud specific instructions
+
+- Fully static Astro site — no backend, database, or external service is required to run or test it. The Instagram/Meta API integration is deprecated (see `decisions/`) and not wired into `src/`; the carousel uses static images from `src/data/carousel.yaml`.
+- Dev/build/preview commands live in `package.json` (`npm run dev`, `npm run build`, `npm run preview`); see `## Commands` above. There is no lint or automated-test script configured.
+- `npm run dev` serves at `http://localhost:4321/` and binds to localhost only. To reach it from another host, run with `--host` (e.g. `npm run dev -- --host`).
+- Node `>=20` is required (`.node-version` pins `20`; newer majors such as 22 also work).
