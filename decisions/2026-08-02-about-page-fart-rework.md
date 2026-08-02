@@ -181,4 +181,6 @@ missing or broken image doesn't create an accessibility gap on its own
 `differentiator.imageAlt`. `src/lib/content.ts` — added optional
 `image?`/`imageAlt?` to the `Differentiator` type. `what-were-about.astro`
 — renders the `<img class="fart-flyer">` conditionally on `diff.image`,
-plus its `.fart-flyer` styling. New asset: `public/images/fart-flyer.jpg`.
+plus its `.fart-flyer` styling. New asset: `public/images/FART.jpg` (the
+original church-provided flyer graphic — not a generated/synthesized
+image).

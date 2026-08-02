@@ -117,7 +117,7 @@ export type Differentiator = {
   /**
    * Optional promo/flyer image rendered at the top of the FART section
    * (immediately under the "Come FART with us" heading, before the intro
-   * copy) — a public/images/ path, e.g. `/images/fart-flyer.jpg`. Purely
+   * copy) — a public/images/ path, e.g. `/images/FART.jpg`. Purely
    * decorative reinforcement of the section's existing text; the section
    * renders exactly as before if this is omitted.
    */

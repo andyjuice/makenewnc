@@ -155,10 +155,12 @@ before this change); making the field optional means an editor can drop
 the flyer later (or swap it out entirely) by just deleting two lines from
 YAML, with no `.astro`/`.ts` change needed either way.
 
-**Asset:** `public/images/fart-flyer.jpg` — a single static promo graphic
-(not a carousel), so it doesn't use the `carousel.yaml`/`getCarouselCards()`
-machinery built for `CardHandCarousel`; that machinery exists specifically
-for the home page's multi-card deck, which this single image isn't part of.
+**Asset:** `public/images/FART.jpg` — the original church-provided flyer
+graphic (1080×1350), added directly to `main` rather than generated. It's a
+single static promo graphic, not a carousel, so it doesn't use the
+`carousel.yaml`/`getCarouselCards()` machinery built for
+`CardHandCarousel`; that machinery exists specifically for the home page's
+multi-card deck, which this single image isn't part of.
 
 **Styling:** `.fart-flyer` in `what-were-about.astro`'s `<style>` block
 caps the image at `max-width: 22rem`, centers it, and reuses the same

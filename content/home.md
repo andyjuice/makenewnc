@@ -20,7 +20,7 @@ differentiator:
   # "Amendment: FART section flyer image"). Rendered by
   # what-were-about.astro as the first thing under the "Come FART with us"
   # heading, before the intro paragraphs.
-  image: /images/fart-flyer.jpg
+  image: /images/FART.jpg
   imageAlt: >
     "Makenew Presents: Faith Art Religion Tech" flyer graphic, with a photo
     from a [make]new Friday and "Check us out" pointing to @nc.makenew on
