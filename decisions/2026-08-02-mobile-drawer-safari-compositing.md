@@ -1,35 +1,38 @@
-# Mobile drawer — iOS Safari compositing fix
+# Mobile drawer — iOS Safari positioning fix
 
 **Date:** 2026-08-02
-**Status:** Accepted
+**Status:** Accepted (amended same day after user retest)
 
 ## Decision
 
-When the hamburger drawer is open, raise the drawer above the sliding
-`#app-stage` panel (`z-index: 3` vs `2`), use `translate3d` for drawer/stage
-motion, add an explicit `--drawer-w` fallback (`88vw`), and set explicit
-drawer link colors (not only `var(--text)`).
+Animate the push drawer with a **`right` offset** (`right: calc(-1 * var(--drawer-w))` →
+`right: 0`) instead of `transform: translateX(100%)`. Use a fixed
+`--drawer-w: 17.5rem` (no `min()` / `88vw`). Keep the open drawer above the
+sliding stage (`z-index: 3`) and explicit drawer link colors.
 
 ## Context
 
-On iOS Safari the push drawer opened (divider lines and focus ring visible)
-but nav link labels were invisible — reported on production at mobile
-width. Chrome/desktop emulation rendered labels correctly. The drawer sits
-under `#app-stage` during the push animation; WebKit can keep painting the
-transformed stage layer over the drawer panel so text is occluded while
-borders and `:focus-visible` outlines still show.
+First pass (same day) assumed invisible link text from WebKit compositing
+(stage layer painted over labels). User retest on iPhone Safari showed the
+real defect: the drawer panel slid **off the left edge** — only a narrow
+sliver of divider lines remained visible ("The menu goes too far left").
+
+Root cause: **`translateX(100%)` on a `right: 0` panel is unreliable in
+iOS Safari**; the open state can resolve as an off-screen negative translate,
+parked left of the viewport. Replacing percentage transforms with explicit
+`right` motion avoids that class of WebKit bug. A fixed `--drawer-w` also
+keeps stage `calc(-1 * var(--drawer-w))` and drawer width in sync.
 
 ## Alternatives considered
 
-1. **Switch to `<dialog>` or a fixed overlay drawer.** Rejected — larger UX
-   change; push-drawer design is locked (`decisions/2026-06-13-production-design-lock.md`).
-2. **Keep z-index and only change link `color`.** Rejected — accent/current
-   page colors also failed to show, indicating occlusion not contrast.
-3. **Drop the push animation on mobile.** Rejected — unnecessary regression;
-   z-index swap preserves the motion.
+1. **Left-side drawer (content pushes right).** Rejected — push-from-right
+   matches the locked production pattern ("shifts page content left").
+2. **`<dialog>` / fixed overlay.** Rejected — larger UX change.
+3. **Keep percentage translate and only tweak z-index/colors.** Rejected —
+   user retest proved positioning, not contrast, was broken.
 
 ## Tradeoffs
 
-- Open drawer paints above the stage instead of strictly beneath it. The slide
-  still reads as a push because the stage translates left; only compositing
-  order changes so labels remain readable on WebKit.
+- Drawer width is capped at `17.5rem` on all viewports (was up to `88vw`).
+  On very narrow phones this leaves more content visible beside the panel,
+  which is acceptable and closer to a standard nav width.

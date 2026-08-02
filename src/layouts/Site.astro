@@ -338,9 +338,9 @@ function isCurrentNavLink(href: string) {
     --border: #e2e8f0;
     --phone-screen: #f8fafc;
     --font: 'Space Grotesk', system-ui, sans-serif;
-    /* Fallback first for older WebKit that can't resolve min() inside var(). */
-    --drawer-w: 88vw;
-    --drawer-w: min(17.5rem, 88vw);
+    /* Fixed length so calc()/right offsets resolve reliably in WebKit
+       (min()/vw inside var() broke drawer positioning on iOS Safari). */
+    --drawer-w: 17.5rem;
     margin: 0;
     background: var(--bg);
     color: var(--text);
@@ -398,10 +398,10 @@ function isCurrentNavLink(href: string) {
   .site .header__icon[hidden] { display: none; }
 
   /* Push drawer — lives below header; shifts page content left.
-     When open, the drawer must sit *above* the sliding stage on iOS Safari:
-     WebKit keeps a full-width compositor layer for the transformed stage and
-     can paint it over the drawer panel beneath, hiding link text while
-     borders/focus rings still peek through. */
+     Drawer motion uses the `right` offset, not transform percentages:
+     iOS Safari mis-resolves translateX(100%) on right-anchored panels and
+     can park the open drawer off the left edge (only divider slivers visible).
+     Keep the open drawer above the sliding stage for WebKit compositing. */
   .site .shell {
     position: relative;
     flex: 1;
@@ -426,7 +426,7 @@ function isCurrentNavLink(href: string) {
   .site .drawer {
     position: absolute;
     top: 0;
-    right: 0;
+    right: calc(-1 * var(--drawer-w));
     z-index: 1;
     display: flex;
     flex-direction: column;
@@ -439,15 +439,15 @@ function isCurrentNavLink(href: string) {
     border-left: 1px solid var(--border);
     background: var(--bg);
     overflow-y: auto;
-    transform: translate3d(100%, 0, 0);
-    transition: transform 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: right 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
+  .site .drawer.drawer--open,
   .site .shell--drawer-open .drawer {
+    right: 0;
     z-index: 3;
   }
   .site--dark .drawer { background: #111; }
   .site .drawer[hidden] { display: none; }
-  .site .drawer.drawer--open { transform: translate3d(0, 0, 0); }
   .site .drawer a {
     padding: 0.875rem 0;
     text-decoration: none;
