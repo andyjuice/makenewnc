@@ -12,28 +12,43 @@ header logo (`Site.astro`). There is no separate square/vector logo asset.
 
 `scripts/generate-favicons.py` reads the source PNG and writes:
 
-| File | Size | Variant | Used for |
-|---|---|---|---|
-| `public/favicon.ico` | 16/32/48 | flush | Legacy browsers, bookmarks |
-| `public/favicon-16x16.png` | 16 | flush | Modern browsers (small tab) |
-| `public/favicon-32x32.png` | 32 | flush | Modern browsers (retina tab) |
-| `public/apple-touch-icon.png` | 180 | padded | iOS home screen |
-| `public/icon-192.png` | 192 | padded | Android/PWA install |
-| `public/icon-512.png` | 512 | padded | Android/PWA install (splash) |
+| File | Size | Variant | Background | Used for |
+|---|---|---|---|---|
+| `public/favicon.ico` | 16/32/48 | flush | **transparent** | Legacy browsers, bookmarks |
+| `public/favicon-16x16.png` | 16 | flush | **transparent** | Modern browsers (small tab) |
+| `public/favicon-32x32.png` | 32 | flush | **transparent** | Modern browsers (retina tab) |
+| `public/apple-touch-icon.png` | 180 | padded | opaque white | iOS home screen |
+| `public/icon-192.png` | 192 | padded | opaque white | Android/PWA install |
+| `public/icon-512.png` | 512 | padded | opaque white | Android/PWA install (splash) |
 
-The source PNG (white bars on black) is **inverted** before compositing —
-black bars on a white square canvas. A solid black favicon reads as an
-unappealing "hole" in a browser tab; white-background icons sit comfortably
-in both light and dark browser chrome. (This mirrors the `filter: invert(1)`
-CSS already applied to the header logo in light theme — same transform,
-different reason. See the amendment note in
-`decisions/2026-08-02-favicon-set.md`.)
+Two different backgrounds come out of the same source mark, because the
+right answer differs by platform (see the "truly transparent favicon
+background" amendment in `decisions/2026-08-02-favicon-set.md` for the full
+history):
 
-"Flush" = the inverted logo padded onto a square white canvas with no extra
-margin (maximizes size/legibility in an unmasked browser-tab square).
-"Padded" = flush + ~16% margin on all sides, because iOS/Android apply
-their own rounded-corner and safe-zone masking to home-screen/install icons
-and will visibly clip a flush-edge image.
+- **Browser-tab favicon** (`favicon.ico`, `favicon-16x16.png`,
+  `favicon-32x32.png`): black bars with a genuinely transparent
+  background. `build_black_on_transparent()` uses the source's per-pixel
+  luminance as an alpha mask (white bars → opaque, black background →
+  transparent) and flattens the RGB channels to solid black. Modern
+  browsers composite this correctly against any tab-chrome color, light or
+  dark, so transparency beats picking one fixed fill.
+- **Home-screen / install icons** (`apple-touch-icon.png`, `icon-192.png`,
+  `icon-512.png`): black bars on an **opaque white** square, built the
+  original way — `ImageOps.invert()` on the whole source image (white bars
+  on black → black bars on white), since every pixel of an inverted RGB
+  image stays fully opaque. This variant is kept because iOS does not
+  honor alpha on `apple-touch-icon`: it fills transparent pixels with
+  solid black, which would defeat the purpose of "transparent" and look
+  like a rendering bug instead. Android/PWA install icons are kept opaque
+  too, for the same belt-and-suspenders reason (behavior varies by
+  launcher/OS version).
+
+"Flush" = the mark padded onto a square canvas with no extra margin
+(maximizes size/legibility in an unmasked browser-tab square). "Padded" =
+flush + ~16% margin on all sides, because iOS/Android apply their own
+rounded-corner and safe-zone masking to home-screen/install icons and will
+visibly clip a flush-edge image.
 
 `public/site.webmanifest` references `icon-192.png`/`icon-512.png`, sets
 `background_color` to `#ffffff` (matching the icon canvas — this is the

@@ -91,3 +91,88 @@ before compositing, and canvas fill color changed from black to white.
 `#ffffff` to match the icon's new background (this is the PWA splash-screen
 color, distinct from `theme_color`, which stays `#0a0a0a` to match the
 site's actual dark-by-default UI).
+
+## Amendment (2026-08-02, later same day): truly transparent favicon background
+
+The white-background fix above solved the "black hole in the tab" problem,
+but a white square is still a visible background — it looks like a small
+white sticker in dark browser tab bars instead of blending in. Follow-up
+request: make the actual browser-tab favicon (not the touch/install icons)
+have a real transparent background instead of a white fill, so it reads as
+just "black bars" against whatever chrome color the browser uses.
+
+### Decision
+
+Split the single black-on-white pipeline into two, both driven off the same
+`public/images/makenew-icon.png` source:
+
+1. **Browser-tab favicon** (`favicon.ico`, `favicon-16x16.png`,
+   `favicon-32x32.png`): black bars, **fully transparent background**.
+   Built by `build_black_on_transparent()` — the source's grayscale
+   luminance becomes the alpha channel (white bars → opaque, black
+   background → transparent), then RGB is flattened to solid black.
+2. **Home-screen/install icons** (`apple-touch-icon.png`, `icon-192.png`,
+   `icon-512.png`): unchanged — black bars on **opaque white**, via the
+   original `ImageOps.invert()` approach.
+
+### Context / why not transparent everywhere
+
+Researched current (2026) iOS/Android behavior before making this change:
+iOS Safari does not honor alpha on `apple-touch-icon` — any transparent
+pixel is filled with solid black at render time, before the home-screen
+"squircle" mask is applied. Shipping a transparent PNG there wouldn't
+produce a transparent icon; it would produce a black-cornered icon, which
+is strictly worse than the current opaque-white one. Android/PWA launcher
+behavior on transparent install icons is inconsistent across OEMs, so the
+same "keep it opaque" choice was extended to `icon-192.png`/`icon-512.png`
+rather than special-casing just Apple.
+
+The actual browser-tab favicon has no such platform restriction — Chrome,
+Firefox, and Edge all composite alpha correctly in tab bars — so
+transparency is a strict improvement there with no offsetting risk.
+
+### Alternatives considered
+
+1. **Transparent everywhere, including touch/install icons.** Rejected —
+   would visibly regress the iOS home-screen icon (black-filled corners)
+   for a platform that doesn't support the thing being requested.
+2. **Pick a single non-white, non-black fill (e.g. a brand accent color)
+   for the favicon instead of true transparency.** Rejected — doesn't
+   solve the actual ask (a genuinely transparent background), and adds a
+   new color choice with no clear source of truth (no brand accent is
+   defined for icon backgrounds elsewhere in the codebase).
+3. **Reuse `ImageOps.invert()` output and just strip white pixels to
+   transparent via a color-key.** Rejected in favor of the luminance-as-alpha
+   approach — a hard color-key produces jagged/aliased edges on the
+   antialiased bar outlines in the source art, while treating luminance as
+   alpha preserves the existing antialiasing as smooth partial transparency
+   "for free."
+
+### Tradeoffs
+
+| Gain | Cost |
+|---|---|
+| Favicon blends into any browser tab-chrome color (light or dark) instead of showing a white square | Two generation pipelines instead of one in `scripts/generate-favicons.py` (more code, but each half stays simple) |
+| No visual regression on iOS/Android home-screen icons | `public/site.webmanifest`'s `background_color` (`#ffffff`) still only describes the opaque icons — a future reader could wonder why it doesn't match the (now transparent) favicon; noted here and in `architecture/favicon.md` to preempt that confusion |
+
+### Final rationale
+
+Transparency is a real win for the favicon specifically (no platform
+caveats, strictly better in every browser tested), but is not a universal
+win across every icon surface this codebase generates — iOS actively
+punishes transparent home-screen icons. Splitting the pipeline by surface,
+rather than picking one background for all six files, matches how each
+surface actually renders the asset instead of optimizing for pipeline
+simplicity over correctness.
+
+### Follow-up
+
+- `scripts/generate-favicons.py`: added `build_black_on_transparent()` and
+  `build_square_flush_transparent()`; `main()` now runs both the opaque
+  (touch/install) and transparent (favicon) pipelines from the same source
+  image.
+- `docs/favicon.md` and `architecture/favicon.md` updated to describe the
+  two-variant output and why they differ.
+- `public/site.webmanifest` left unchanged — its `background_color:
+  "#ffffff"` still accurately describes `icon-192.png`/`icon-512.png`,
+  which remain opaque.
