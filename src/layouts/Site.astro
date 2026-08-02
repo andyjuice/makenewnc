@@ -35,8 +35,10 @@ const campuses = getCampuses();
     <meta name="description" content={description ?? site.tagline} />
     <title>{title} · {site.name}</title>
     <!--
-      Favicon/touch-icon set generated from the [make]new bars mark
-      (public/images/makenew-icon.png) — see decisions/2026-08-02-favicon-set.md.
+      Favicon/touch-icon set generated (scripts/generate-favicons.py) from
+      the [make]new bars mark (public/images/makenew-icon.png), inverted to
+      black-bars-on-white — a solid black square favicon reads as an
+      unappealing "hole" in a browser tab. See decisions/2026-08-02-favicon-set.md.
       favicon.ico covers legacy browsers; PNG variants cover modern browsers,
       iOS home-screen, and Android/PWA install prompts.
     -->

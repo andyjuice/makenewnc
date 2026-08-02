@@ -67,3 +67,27 @@ browsers need" task, not a redesign.
 - `public/site.webmanifest` added (name, icons, theme/background color).
 - `docs/favicon.md` added with the regeneration steps for future logo
   changes.
+
+## Amendment (same review pass): black background flipped to white
+
+The first version of this icon set used the source logo as-is — a solid
+black square background. Review feedback called this "unappealing" in a
+browser tab (it reads as a black hole rather than a mark). Fixed by
+inverting the source palette before building the icon canvas: black bars on
+a white background instead of white bars on black.
+
+This reuses a transform the codebase already applies elsewhere for a
+different reason — `Site.astro`'s `.site:not(.site--dark) .header__logo`
+rule does `filter: invert(1)` on this same PNG so the header logo reads
+correctly against the light theme's white header background. The favicon
+needed the same transform for a different reason (tab-icon friendliness,
+independent of site theme — favicons don't switch with `prefers-color-scheme`
+reliably across browsers, so one fixed light-background icon was chosen
+over a black or theme-dependent one).
+
+`scripts/generate-favicons.py` now calls `ImageOps.invert()` on the source
+before compositing, and canvas fill color changed from black to white.
+`public/site.webmanifest`'s `background_color` updated from `#0a0a0a` to
+`#ffffff` to match the icon's new background (this is the PWA splash-screen
+color, distinct from `theme_color`, which stays `#0a0a0a` to match the
+site's actual dark-by-default UI).

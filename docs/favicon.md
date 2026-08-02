@@ -6,7 +6,11 @@ the existing header logo — there's one source image to update.
 ## Quick steps (logo changed)
 
 1. **Replace** `public/images/makenew-icon.png` with the new logo (same
-   role as today: header icon + favicon source).
+   role as today: header icon + favicon source). The generator inverts this
+   image (assumes light-on-dark art, like the current white-bars-on-black
+   mark) to build a white-background favicon — if the new logo is already
+   dark-on-light, remove the `ImageOps.invert()` call in
+   `scripts/generate-favicons.py`.
 2. **Regenerate** the icon set:
 
    ```bash
