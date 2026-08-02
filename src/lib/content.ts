@@ -114,6 +114,16 @@ export type DifferentiatorItem = {
 export type Differentiator = {
   title: string;
   acronym: string;
+  /**
+   * Optional promo/flyer image rendered at the top of the FART section
+   * (immediately under the "Come FART with us" heading, before the intro
+   * copy) — a public/images/ path, e.g. `/images/FART.jpg`. Purely
+   * decorative reinforcement of the section's existing text; the section
+   * renders exactly as before if this is omitted.
+   */
+  image?: string;
+  /** Required alongside `image` — describes the flyer for screen readers. */
+  imageAlt?: string;
   intro: string;
   items: DifferentiatorItem[];
 };

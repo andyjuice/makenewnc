@@ -149,3 +149,38 @@ a future agent wires up `home.cta` and should carry this same fix over.
 `differentiator.items[].body` fields edited as above. No changes to
 `src/pages/what-were-about.astro` or `src/lib/content.ts` — this was a
 copy-only edit, the rendering/data-shape contract is unchanged.
+
+## Amendment (2026-08-02, later same day): add flyer image to FART section
+
+**Decision:** render a promo flyer graphic ("Faith Art Religion Tech,"
+[make]new Friday photo, `@nc.makenew` Instagram call-to-action) as the
+first element under the "Come FART with us" heading, ahead of the intro
+paragraphs. Requested directly, not sourced from a review-feedback pass
+like the rest of this file.
+
+**Alternatives considered:**
+
+1. **Hardcode the `<img>` and its `src`/`alt` directly in
+   `what-were-about.astro`.** Rejected — every other piece of FART-section
+   copy is content-driven via `content/home.md`; a hardcoded one-off image
+   would be the only thing on this page an editor couldn't change without
+   touching `.astro` source.
+2. **Model it as a `carousel.yaml`-style single-item gallery** (reusing
+   `getCarouselCards()`/`CardHandCarousel`). Rejected — that machinery
+   exists for the home page's swipeable multi-card deck; a single static
+   image doesn't need swipe/drag/layering logic, and forcing it through
+   that component would pull in unrelated JS for no benefit.
+
+**Tradeoffs:** the flyer's own text (FART acronym, Instagram handle)
+duplicates information already on the page in prose form, but that's the
+point — it's a visual/promotional reinforcement, not new information, so a
+missing or broken image doesn't create an accessibility gap on its own
+(the surrounding text and `imageAlt` still carry the same facts).
+
+**Follow-up:** `content/home.md` — added `differentiator.image` and
+`differentiator.imageAlt`. `src/lib/content.ts` — added optional
+`image?`/`imageAlt?` to the `Differentiator` type. `what-were-about.astro`
+— renders the `<img class="fart-flyer">` conditionally on `diff.image`,
+plus its `.fart-flyer` styling. New asset: `public/images/FART.jpg` (the
+original church-provided flyer graphic — not a generated/synthesized
+image).

@@ -123,6 +123,40 @@ asserted without pointing anywhere someone could actually verify it.
   stated in the cycling tagline text (with a footnote, for mobility); the
   About page no longer elaborates on them individually.
 
+## Amendment (2026-08-02, later same day): FART section flyer image
+
+Added a promo flyer graphic (black background, "Faith Art Religion Tech,"
+a photo from a [make]new Friday, and an `@nc.makenew` Instagram
+call-to-action) as the first thing rendered under the "Come FART with us"
+heading, above the two intro paragraphs.
+
+**Goal:** give the section an eye-catching visual anchor that echoes the
+same "FART" framing already used in the page copy, without restructuring
+anything else about the section.
+
+**Non-goal:** this is not a new content type or gallery — it's a single
+optional image field on the existing `differentiator` content block.
+
+**User-facing behavior:** on `/what-were-about`, directly below the "Come
+FART with us" `<h2>`, a flyer image now appears before "Yes, we know it's
+immature..." Nothing else in the section's order changed.
+
+**System constraints:** `differentiator.image` / `differentiator.imageAlt`
+are optional fields on `content/home.md`; `what-were-about.astro` only
+renders the `<img>` when `diff.image` is set, so omitting them (e.g. if the
+flyer is retired later) degrades gracefully back to the pre-image layout
+with no code change required.
+
+**Edge cases:** the image is decorative reinforcement of text already on
+the page (the flyer's own copy duplicates the FART acronym and the
+Instagram handle), so a missing/broken image doesn't lose any information
+a screen-reader user couldn't already get from the surrounding text and
+`imageAlt`.
+
+See `architecture/about-page-fart-rework.md` and
+`decisions/2026-08-02-about-page-fart-rework.md` for implementation detail
+and rationale.
+
 ## Open questions
 
 - Is "apologetics" defined precisely enough for a general audience in one

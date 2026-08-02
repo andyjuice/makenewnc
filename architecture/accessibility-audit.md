@@ -133,6 +133,32 @@ small safety margin over the 4.5:1 minimum). New stops:
 
 Alternatives considered and why they weren't used: see the decision log.
 
+### Amendment (2026-08-02, later same day): replaced with a solid `--accent` fill
+
+A later, explicit design request asked to drop the gradient treatment
+entirely in light mode and use a solid color matching the site's own
+accent color instead of an Instagram-brand palette (superseding this
+audit's original choice to darken-in-place rather than switch to a solid
+color — see the decision log's amendment for why that's now reversed).
+
+```css
+.site .gateway__ig {
+  background: var(--accent); /* #e1306c in light mode */
+  color: #0a0a0a;
+}
+```
+
+`#0a0a0a` text on `--accent` (`#e1306c`) is 4.56:1 — clears the 4.5:1 AA
+minimum, though with less margin than the darkened-gradient's worst-case
+stop (4.60:1) had. This is the same accent-fill + dark-text pairing
+already used by `.skip-link` and `.fart-item__letter` elsewhere in
+`Site.astro`, so the button now reads as "this site's accent color," not
+an Instagram-brand color borrowed for one component.
+
+Dark mode's `.site--dark .gateway__ig` (transparent background, accent
+border/text) is untouched — it was never a gradient and was never a
+contrast problem.
+
 ## Heading hierarchy: `.section-label` → `<h2>`
 
 `.section-label` is a small uppercase caption style used as a de facto

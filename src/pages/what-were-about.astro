@@ -33,6 +33,15 @@ const introParagraphs = diff.intro
 
   <section id="fart" class="about-section">
     <h2 class="section-label">{diff.title}</h2>
+    {diff.image && (
+      <img
+        class="fart-flyer"
+        src={diff.image}
+        alt={diff.imageAlt ?? ''}
+        width="1080"
+        height="1350"
+      />
+    )}
     {introParagraphs.map((paragraph) => (
       <p class="about-body">{paragraph}</p>
     ))}
@@ -55,6 +64,15 @@ const introParagraphs = diff.intro
 </Site>
 
 <style>
+  .fart-flyer {
+    display: block;
+    width: 100%;
+    max-width: 22rem;
+    height: auto;
+    margin: 0 auto 1.25rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
   .about-body {
     margin: 0 0 0.75rem;
     color: var(--muted);

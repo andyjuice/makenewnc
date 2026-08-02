@@ -130,6 +130,34 @@ behind each fix. Summary:
   `dismissible`) rather than being gated behind `dismissible` — see the
   decision log for why this wasn't "fixed" to be dismissible-only instead.
 
+## Amendment (2026-08-02, later same day): light-mode Instagram CTA — solid color, not gradient
+
+This audit's original fix (finding 4, above) darkened the Instagram-brand
+gradient in place to clear contrast, deliberately rejecting a switch to a
+solid color as "more visual change than necessary for a contrast fix" (see
+`decisions/2026-08-02-accessibility-audit.md`, alternative 3 under
+"Instagram gradient CTA contrast"). A later, explicit design request asked
+for the gradient to be removed anyway, in favor of a solid color matching
+the site's own accent color rather than an Instagram-brand treatment.
+
+**Goal:** light-mode `.gateway__ig` (the "Follow us on Instagram" /
+campus-picker trigger button) uses a flat `var(--accent)` fill instead of
+any gradient, and remains WCAG AA compliant (≥4.5:1 text contrast).
+
+**Non-goal:** dark mode is unchanged — it already used a transparent
+background with an accent border/text, which was never a gradient or a
+contrast problem (see the original audit's "What was checked but not
+changed").
+
+**User-facing behavior:** in light mode, the button is now a flat pink
+(`--accent`, `#e1306c`) with dark (`#0a0a0a`) text, instead of the
+multi-stop dark amber-to-purple diagonal gradient. Text contrast is
+4.56:1, clearing the 4.5:1 AA minimum for normal-size text.
+
+See `decisions/2026-08-02-accessibility-audit.md` (amendment) and
+`architecture/accessibility-audit.md` (amendment) for the full
+reasoning and implementation.
+
 ## Open questions
 
 - Should axe-core or a similar automated a11y linter be added to CI to
