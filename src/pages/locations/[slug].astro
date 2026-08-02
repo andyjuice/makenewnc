@@ -27,7 +27,7 @@ const sunday = campus.services?.sunday;
 
   {carouselCards.length > 0 && (
     <section class="campus-gallery" aria-label={`${campus.name} photo gallery`}>
-      <p class="section-label">Gallery</p>
+      <h2 class="section-label">Gallery</h2>
       <CardHandCarousel cards={carouselCards} />
     </section>
   )}
@@ -43,12 +43,13 @@ const sunday = campus.services?.sunday;
     >
       {campus.address.street}, {campus.address.city} {campus.address.state}
       {campus.address.note && ` · ${campus.address.note}`}
+      <span class="visually-hidden"> (opens in new tab)</span>
     </a>
   )}
 
   {campus.contact && (
     <div class="campus-contact">
-      <p class="section-label">Contact</p>
+      <h2 class="section-label">Contact</h2>
       <p class="campus-contact__details">
         <a href={`tel:${campus.contact.phone.replace(/[^\d+]/g, '')}`} class="campus-contact__link">
           {campus.contact.phone}
@@ -93,6 +94,6 @@ const sunday = campus.services?.sunday;
     target="_blank"
     rel="noopener noreferrer"
   >
-    Follow us on Instagram
+    Follow us on Instagram<span class="visually-hidden"> (opens in new tab)</span>
   </a>
 </Site>

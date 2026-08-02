@@ -13,6 +13,7 @@ const ctpt = getCtpt();
       <li>
         <a href={ch.url} target="_blank" rel="noopener noreferrer" class="ctpt-link">
           {ch.title}
+          <span class="visually-hidden"> (opens in new tab)</span>
         </a>
       </li>
     ))}
@@ -21,8 +22,18 @@ const ctpt = getCtpt();
 
 <style>
   .ctpt-link {
+    /* Block + full-row min-height: the <li> already looks like a full-width
+       tappable row (padding + bottom border), so the link itself should
+       cover that whole area, not just the text glyphs. */
+    display: flex;
+    align-items: center;
+    min-height: 44px;
     color: var(--text, #0f172a);
     font-weight: 600;
-    text-decoration: none;
+    /* Underlined rather than color-only: this link's color matches the
+       surrounding body text, so an underline is the only cue (besides
+       hover/focus) that it's actually a link. */
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 </style>

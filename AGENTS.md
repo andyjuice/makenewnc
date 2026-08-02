@@ -36,7 +36,7 @@ npm run build
 
 - [make]new icon (not text)
 - Dark mode toggle (persists in localStorage)
-- Hamburger menu → drawer nav
+- Hamburger menu → drawer nav (focus-trapped while open; current page marked via `aria-current`)
 
 ## Home
 
@@ -45,5 +45,6 @@ npm run build
 
 ## Constraints
 
-- Mobile-first; tagline cycling respects `prefers-reduced-motion`
+- Mobile-first; tagline cycling respects `prefers-reduced-motion` (JS-gated auto-advance) and all CSS transitions respect it too (sitewide `@media (prefers-reduced-motion: reduce)` override in `Site.astro`)
 - Legacy `/prototypes/*` URLs redirect to production routes
+- Accessibility: see `specs/accessibility-audit.md` / `architecture/accessibility-audit.md` for the drawer/popup focus-trap pattern (mirror `CampusInstagramMenu`'s mobile sheet for any new overlay/dialog), contrast-checking approach, and other audited patterns to follow for new UI
