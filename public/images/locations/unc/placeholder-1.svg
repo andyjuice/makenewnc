@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 533" role="img" aria-label="UNC gallery placeholder 1">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7bafd4"/>
+      <stop offset="100%" stop-color="#4a8ab5"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="533" fill="url(#bg)"/>
+  <text x="200" y="260" fill="#0f172a" font-family="system-ui,sans-serif" font-size="16" font-weight="600" text-anchor="middle">UNC gallery</text>
+  <text x="200" y="290" fill="#1e3a5f" font-family="system-ui,sans-serif" font-size="13" text-anchor="middle">Drop photos here</text>
+</svg>

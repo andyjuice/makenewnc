@@ -42,6 +42,11 @@ export type CampusAddress = {
   mapsUrl: string;
 };
 
+export type CampusContact = {
+  phone: string;
+  email: string;
+};
+
 export type CampusStatus = 'active' | 'coming-soon';
 
 export type Campus = {
@@ -50,6 +55,8 @@ export type Campus = {
   university: string;
   city: string;
   status: CampusStatus;
+  /** Campus contact — phone and email for reaching this location. */
+  contact?: CampusContact;
   /** Campus Instagram profile — primary CTA from the locations picker. */
   instagram: string;
   description: string;
@@ -91,11 +98,24 @@ export type Characteristic = {
   footnote?: string;
 };
 
-export type Pillar = {
-  title: string;
-  slug: string;
+export type DifferentiatorItem = {
+  letter: string;
+  word: string;
   summary: string;
+  /**
+   * Extended card description. May contain trusted inline HTML (e.g. an
+   * `<abbr title="...">` definition tooltip, or a same-site `<a>` link) —
+   * content/home.md is the only writer, so what-were-about.astro renders
+   * this via `set:html` rather than escaping it as plain text.
+   */
   body: string;
+};
+
+export type Differentiator = {
+  title: string;
+  acronym: string;
+  intro: string;
+  items: DifferentiatorItem[];
 };
 
 export type HomeContent = {
@@ -106,8 +126,8 @@ export type HomeContent = {
   showHeroVideo: boolean;
   aboutTitle: string;
   aboutIntro: string;
+  differentiator: Differentiator;
   characteristics: Characteristic[];
-  pillars: Pillar[];
   cta: { heading: string; text: string; link: string };
 };
 
@@ -156,14 +176,17 @@ export type CarouselConfig = {
   cards: CarouselCardInput[];
 };
 
+export type CampusCarouselsConfig = Record<string, CarouselConfig>;
+
 const CAROUSEL_IMAGE_DIR = '/images/carousel';
+const CAMPUS_CAROUSEL_IMAGE_DIR = '/images/locations';
 
 /** Map manifest image field to a public URL at build time. */
-function resolveCarouselImage(image: string): string {
+function resolveCarouselImage(image: string, baseDir: string): string {
   if (image.startsWith('/') || image.startsWith('http://') || image.startsWith('https://')) {
     return image;
   }
-  return `${CAROUSEL_IMAGE_DIR}/${image}`;
+  return `${baseDir}/${image}`;
 }
 
 function readYaml<T>(filePath: string): T {
@@ -239,7 +262,20 @@ export function getPrivacyBody(): string {
 export function getCarouselCards(): CarouselCard[] {
   const data = readYaml<CarouselConfig>(path.join(root, 'data', 'carousel.yaml'));
   return data.cards.map((card) => ({
-    imageUrl: resolveCarouselImage(card.image),
+    imageUrl: resolveCarouselImage(card.image, CAROUSEL_IMAGE_DIR),
+    alt: card.alt,
+    link: card.link?.trim() || undefined,
+  }));
+}
+
+/** Per-campus gallery carousel — images in public/images/locations/{slug}/, manifest in campus-carousels.yaml. */
+export function getCampusCarouselCards(slug: string): CarouselCard[] {
+  const data = readYaml<CampusCarouselsConfig>(path.join(root, 'data', 'campus-carousels.yaml'));
+  const campus = data[slug];
+  if (!campus?.cards?.length) return [];
+  const baseDir = `${CAMPUS_CAROUSEL_IMAGE_DIR}/${slug}`;
+  return campus.cards.map((card) => ({
+    imageUrl: resolveCarouselImage(card.image, baseDir),
     alt: card.alt,
     link: card.link?.trim() || undefined,
   }));

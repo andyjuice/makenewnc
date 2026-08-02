@@ -33,7 +33,8 @@ site.yaml     → getSite() (brand, social, contact)
 ```
 content/home.md → getHome()
   ├── characteristics[] → GatewayTagline
-  └── pillars[]         → about.astro sections
+  ├── differentiator    → what-were-about.astro FART section (see architecture/about-page-fart-rework.md)
+  └── pillars[]         → what-were-about.astro "Our values" sections
 
 carousel.yaml + public/images/carousel/ → getCarouselCards() → CardHandCarousel
 ```
@@ -69,6 +70,11 @@ Multi-campus ministry requires per-location address and services. `site.yaml` ke
 | Curated carousel YAML | No API secrets; see `docs/carousel.md` |
 | Events → Locations redirect | Service times are campus-scoped |
 | Retire A/B prototypes | Reduce maintenance; redirects preserve old URLs |
+
+## Favicon
+
+Tab/home-screen icons are generated from `public/images/makenew-icon.png`.
+See `architecture/favicon.md`.
 
 ## Dependencies
 

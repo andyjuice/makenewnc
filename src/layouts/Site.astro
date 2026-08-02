@@ -25,6 +25,23 @@ const {
 const site = getSite();
 const announcements = getAnnouncements();
 const campuses = getCampuses();
+
+// Drawer nav links + current-page detection, so keyboard/screen-reader users
+// get an aria-current landmark instead of only a visual/hover cue.
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/locations', label: 'Locations' },
+  { href: '/what-were-about', label: "What we're about" },
+  { href: '/our-story', label: 'Our Story' },
+  { href: '/our-beliefs', label: 'Our Beliefs' },
+  { href: '/christian-themes-for-privileged-teens', label: 'CTPT' },
+  { href: '/privacy', label: 'Privacy' },
+];
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
+function isCurrentNavLink(href: string) {
+  if (href === '/') return pathname === '/';
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
 ---
 
 <!doctype html>
@@ -34,6 +51,20 @@ const campuses = getCampuses();
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description ?? site.tagline} />
     <title>{title} · {site.name}</title>
+    <!--
+      Favicon/touch-icon set generated (scripts/generate-favicons.py) from
+      the [make]new bars mark (public/images/makenew-icon.png), inverted to
+      black-bars-on-white — a solid black square favicon reads as an
+      unappealing "hole" in a browser tab. See decisions/2026-08-02-favicon-set.md.
+      favicon.ico covers legacy browsers; PNG variants cover modern browsers,
+      iOS home-screen, and Android/PWA install prompts.
+    -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0a0a0a" />
     <script is:inline>
       try {
         var theme = localStorage.getItem('makenew-theme') || 'dark';
@@ -47,6 +78,7 @@ const campuses = getCampuses();
     <slot name="head" />
   </head>
   <body class:list={['site', 'site--dark', { 'site--home': home }]}>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <script is:inline>
       try {
         if ((localStorage.getItem('makenew-theme') || 'dark') === 'light') {
@@ -95,19 +127,22 @@ const campuses = getCampuses();
     </header>
     <div class="shell" id="app-shell">
       <nav id="site-drawer" class="drawer" hidden aria-hidden="true" aria-label="Site menu">
-        <a href="/locations">Locations</a>
-        <a href="/what-were-about">What we're about</a>
-        <a href="/our-story">Our Story</a>
-        <a href="/our-beliefs">Our Beliefs</a>
-        <a href="/christian-themes-for-privileged-teens">CTPT</a>
-        <a href="/privacy">Privacy</a>
+        {navLinks.map((link) => (
+          <a href={link.href} aria-current={isCurrentNavLink(link.href) ? 'page' : undefined}>
+            {link.label}
+          </a>
+        ))}
       </nav>
       <div class="shell__stage" id="app-stage">
-        <main class:list={['main', { 'main--scroll': scrollable }]}><slot /></main>
+        <main id="main-content" class:list={['main', { 'main--scroll': scrollable }]}><slot /></main>
         <aside class="social-bar" aria-label="Social media">
           <CampusInstagramMenu campuses={campuses} variant="footer" instanceId="footer" />
-          <a href={site.social.facebook} target="_blank" rel="noopener noreferrer">Facebook</a>
-          <a href={site.social.youtube} target="_blank" rel="noopener noreferrer">YouTube</a>
+          <a href={site.social.facebook} target="_blank" rel="noopener noreferrer">
+            Facebook<span class="visually-hidden"> (opens in new tab)</span>
+          </a>
+          <a href={site.social.youtube} target="_blank" rel="noopener noreferrer">
+            YouTube<span class="visually-hidden"> (opens in new tab)</span>
+          </a>
         </aside>
       </div>
     </div>
@@ -150,27 +185,55 @@ const campuses = getCampuses();
       const btn = document.getElementById('menu-toggle');
       const drawer = document.getElementById('site-drawer');
       const shell = document.getElementById('app-shell');
+      const appStage = document.getElementById('app-stage');
+
+      // Drawer nav focus management: while open, the drawer is the only
+      // interactive region a keyboard/screen-reader user should reach —
+      // background content (appStage) is still partially visible (the push
+      // transform reveals it at the left edge on narrow viewports) but isn't
+      // meant to be operable. Mirrors the tab-trap pattern already used by
+      // CampusInstagramMenu's mobile sheet.
+      let lastFocusedBeforeDrawer = null;
+
+      function getFocusableDrawerLinks() {
+        return drawer ? [...drawer.querySelectorAll('a[href]')] : [];
+      }
 
       function setDrawerOpen(open) {
-        if (!drawer || !shell || !btn) return;
+        if (!drawer || !shell || !btn || !appStage) return;
 
         if (open) {
+          lastFocusedBeforeDrawer = document.activeElement instanceof HTMLElement ? document.activeElement : null;
           drawer.removeAttribute('hidden');
           drawer.setAttribute('aria-hidden', 'false');
           btn.setAttribute('aria-expanded', 'true');
+          appStage.setAttribute('aria-hidden', 'true');
+          appStage.setAttribute('inert', '');
           requestAnimationFrame(() => {
             shell.classList.add('shell--drawer-open');
             drawer.classList.add('drawer--open');
           });
+          getFocusableDrawerLinks()[0]?.focus();
           return;
         }
 
         shell.classList.remove('shell--drawer-open');
         drawer.classList.remove('drawer--open');
         drawer.setAttribute('aria-hidden', 'true');
+        // Also inert immediately (not just aria-hidden): the drawer stays
+        // in the DOM without the `hidden` attribute until the slide-out
+        // transition finishes below, so without this, a fast Tab press
+        // right after closing could still focus a now off-screen,
+        // aria-hidden link during that window.
+        drawer.setAttribute('inert', '');
         btn.setAttribute('aria-expanded', 'false');
+        appStage.removeAttribute('aria-hidden');
+        appStage.removeAttribute('inert');
+        (lastFocusedBeforeDrawer ?? btn).focus();
+        lastFocusedBeforeDrawer = null;
         window.setTimeout(() => {
           drawer.setAttribute('hidden', '');
+          drawer.removeAttribute('inert');
         }, 280);
       }
 
@@ -183,8 +246,26 @@ const campuses = getCampuses();
       });
 
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && shell.classList.contains('shell--drawer-open')) {
+        if (!shell.classList.contains('shell--drawer-open')) return;
+
+        if (e.key === 'Escape') {
           setDrawerOpen(false);
+          return;
+        }
+
+        if (e.key !== 'Tab') return;
+        const focusable = getFocusableDrawerLinks();
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        const active = document.activeElement;
+
+        if (e.shiftKey && active === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && active === last) {
+          e.preventDefault();
+          first.focus();
         }
       });
     </script>
@@ -192,6 +273,59 @@ const campuses = getCampuses();
 </html>
 
 <style is:global>
+  /* Respect the OS-level reduced-motion preference for every transition/
+     animation site-wide (auto-advancing carousels/taglines already gate
+     themselves in JS — see GatewayTagline.astro / CardHandCarousel.astro;
+     this catches the rest: drawer slide, popups, hover/focus transitions). */
+  @media (prefers-reduced-motion: reduce) {
+    .site,
+    .site *,
+    .site *::before,
+    .site *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Visually hidden but screen-reader-accessible — e.g. announcing that a
+     link opens in a new tab, without adding visible clutter. */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Skip link — hidden until keyboard-focused, then pinned to the top so
+     keyboard/screen-reader users can bypass the announcement bar + header
+     and land directly on page content. */
+  .skip-link {
+    position: absolute;
+    top: -3rem;
+    left: 1rem;
+    z-index: 200;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    background: var(--accent, #e1306c);
+    color: #0a0a0a;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-weight: 700;
+    text-decoration: none;
+    transition: top 0.15s ease;
+  }
+  .skip-link:focus-visible {
+    top: 1rem;
+    outline: 2px solid var(--text, #0f172a);
+    outline-offset: 2px;
+  }
+
   .site {
     --bg: #fff;
     --text: #0f172a;
@@ -313,6 +447,11 @@ const campuses = getCampuses();
   }
   .site .drawer a:last-child { border-bottom: none; }
   .site .drawer a:hover { color: var(--accent); }
+  .site .drawer a[aria-current="page"] {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
   .site .main {
     padding: 1.25rem 1rem 2rem;
     max-width: 28rem;
@@ -369,7 +508,12 @@ const campuses = getCampuses();
   .site .gateway__ig {
     display: flex; align-items: center; justify-content: center;
     min-height: 48px; padding: 0.875rem 1rem;
-    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    /* Darkened from the original Instagram brand gradient (#f09433 →
+       #bc1888): the lightest orange stops only hit 2.3–3.3:1 contrast
+       against white button text, well under the 4.5:1 WCAG AA minimum for
+       normal-size text. Every stop below is ≥4.6:1 with white — verified
+       via the WCAG relative-luminance formula, not eyeballed. */
+    background: linear-gradient(45deg, #b0610d, #a73b15, #91172a, #851742, #7a1058);
     color: #fff; font-weight: 700; font-size: 1rem;
     border-radius: 12px; text-decoration: none; margin-bottom: 0.75rem;
     width: 100%;
@@ -487,6 +631,89 @@ const campuses = getCampuses();
     border-color: #7bafd4;
     background: rgba(123, 175, 212, 0.12);
   }
+  /* Mobile campus picker: fixed bottom sheet dialog (home + footer). */
+  .site .campus-ig-menu__sheet[hidden] { display: none; }
+  .site .campus-ig-menu__sheet {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .site .campus-ig-menu__sheet-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+  }
+  .site--dark .campus-ig-menu__sheet-backdrop {
+    background: rgba(0, 0, 0, 0.65);
+  }
+  .site .campus-ig-menu__sheet-panel {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 28rem;
+    margin: 0 auto;
+    padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom));
+    border-radius: 16px 16px 0 0;
+    border: 1px solid var(--border);
+    border-bottom: none;
+    background: var(--phone-screen, #fff);
+    box-shadow: 0 -8px 32px rgba(15, 23, 42, 0.18);
+  }
+  .site--dark .campus-ig-menu__sheet-panel {
+    background: #111;
+    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.5);
+  }
+  .site .campus-ig-menu__mobile-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .site .campus-ig-menu__mobile-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-height: 48px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0;
+    font-size: 0.9375rem;
+    border-radius: 10px;
+    text-decoration: none;
+  }
+  .site .campus-ig-menu__back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 48px;
+    margin-top: 0.75rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .site .campus-ig-menu__back:hover {
+    color: inherit;
+    border-color: var(--accent);
+  }
+  @media (max-width: 639px) {
+    .site .campus-ig-menu__panel {
+      display: none !important;
+    }
+  }
+  @media (min-width: 640px) {
+    .site .campus-ig-menu__sheet {
+      display: none !important;
+    }
+  }
   .site .gateway__gathering {
     background: var(--phone-screen); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem;
     border: 1px solid var(--border);
@@ -525,8 +752,12 @@ const campuses = getCampuses();
     font-size: 0.9375rem;
   }
   .site .section-label {
+    /* Rendered as <h2> on pages with multiple sections (for screen-reader
+       heading navigation) — font-weight is set explicitly so promoting the
+       element doesn't pick up the browser's default bold h2 styling and
+       change its appearance. */
     font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em;
-    color: #047857; margin: 0 0 0.5rem;
+    font-weight: 500; color: #047857; margin: 0 0 0.5rem;
   }
   .site--dark .section-label { color: var(--accent); }
   .site .about-section { margin-bottom: 2rem; }
@@ -573,4 +804,28 @@ const campuses = getCampuses();
   .site .service-blocks { display: grid; gap: 1rem; }
   .site .service-detail { margin: 0.35rem 0 0; font-size: 0.875rem; color: var(--muted); }
   .site .coming-soon-note { color: var(--muted); font-size: 0.9375rem; }
+  .site .campus-contact {
+    margin-bottom: 1.5rem;
+  }
+  .site .campus-contact__details {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+  .site .campus-contact__link {
+    color: inherit;
+    text-decoration: none;
+    font-weight: inherit;
+  }
+  .site .campus-contact__link:hover {
+    text-decoration: underline;
+    color: var(--text);
+  }
+  .site .campus-contact__sep {
+    opacity: 0.65;
+  }
+  .site .campus-gallery {
+    margin: 0 0 1.5rem;
+  }
 </style>
