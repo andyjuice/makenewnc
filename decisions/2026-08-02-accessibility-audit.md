@@ -108,3 +108,50 @@ does things.
   possible product-logic inconsistency worth a maintainer decision, not
   fixed unilaterally here since it's a behavior change beyond "add the
   missing accessibility behavior."
+
+## Amendment (2026-08-02, later same day): reverse the "keep the gradient" call
+
+**Decision:** replace the (already-darkened, already-AA-passing) light-mode
+Instagram gradient on `.gateway__ig` with a flat `var(--accent)` fill and
+`#0a0a0a` text, instead of keeping the gradient darkened as this audit
+originally chose.
+
+**Context:** this audit's original pass explicitly considered and rejected
+"replace the gradient with a solid color" (alternative 3 above) as "more
+visual change than necessary for a contrast fix." A later, explicit design
+request overrode that call: it wanted the Instagram-brand gradient gone in
+light mode regardless, in favor of a color that matches the site's own
+accent rather than borrowing Instagram's brand palette. This is a design
+preference change, not a newly-discovered defect — the darkened gradient
+was already WCAG AA compliant.
+
+**Why `var(--accent)` specifically, not a new one-off color:** `--accent`
+is the site's existing light-mode brand accent (`#e1306c`), already used
+elsewhere (`.skip-link` background, `.fart-item__letter` background) with
+the same `#0a0a0a`-text pairing. Reusing it keeps the button visually
+consistent with the rest of the site instead of introducing a second,
+button-specific color that only this component uses.
+
+**Why `#0a0a0a` text, not white:** checked contrast of both against
+`--accent` (`#e1306c`) via the WCAG relative-luminance formula:
+
+| Text color | Contrast vs. `#e1306c` |
+|---|---|
+| `#ffffff` | 4.34:1 ❌ (fails 4.5:1 AA) |
+| `#0f172a` (`--text`) | 4.12:1 ❌ |
+| `#0a0a0a` | 4.56:1 ✅ |
+
+`#0a0a0a` is also what `.skip-link` and `.fart-item__letter` already pair
+with `--accent`, so this isn't a new pairing invented for this button.
+
+**Tradeoff accepted:** 4.56:1 has a smaller safety margin over the 4.5:1
+AA minimum than the darkened gradient's worst-case stop did (4.60:1) — both
+pass, but a future `--accent` color change in light mode must re-check this
+contrast pairing rather than assume it still passes.
+
+**Follow-up:** `src/layouts/Site.astro` — `.site .gateway__ig` background
+changed from the 5-stop gradient to `var(--accent)`; text color changed
+from `#fff` to `#0a0a0a`. `.site--dark .gateway__ig` (transparent
+background + accent border/text) and the per-campus `campus-ig-btn`
+color overrides (Duke/NC State/UNC) are unchanged — neither used the
+gradient.

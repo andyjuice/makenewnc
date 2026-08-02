@@ -512,13 +512,17 @@ function isCurrentNavLink(href: string) {
   .site .gateway__ig {
     display: flex; align-items: center; justify-content: center;
     min-height: 48px; padding: 0.875rem 1rem;
-    /* Darkened from the original Instagram brand gradient (#f09433 →
-       #bc1888): the lightest orange stops only hit 2.3–3.3:1 contrast
-       against white button text, well under the 4.5:1 WCAG AA minimum for
-       normal-size text. Every stop below is ≥4.6:1 with white — verified
-       via the WCAG relative-luminance formula, not eyeballed. */
-    background: linear-gradient(45deg, #b0610d, #a73b15, #91172a, #851742, #7a1058);
-    color: #fff; font-weight: 700; font-size: 1rem;
+    /* Solid --accent fill, not the Instagram-brand gradient: the gradient
+       (darkened in the 2026-08-02 accessibility audit to clear contrast —
+       see decisions/2026-08-02-accessibility-audit.md, "Amendment: solid
+       accent color") was replaced outright per a later design request to
+       match the site's own accent color instead of an Instagram-brand
+       treatment. #0a0a0a text on --accent (#e1306c) is 4.56:1, clearing the
+       4.5:1 WCAG AA minimum for normal-size text — verified via the WCAG
+       relative-luminance formula, not eyeballed. Same accent+dark-text
+       pairing already used by .skip-link and .fart-item__letter. */
+    background: var(--accent);
+    color: #0a0a0a; font-weight: 700; font-size: 1rem;
     border-radius: 12px; text-decoration: none; margin-bottom: 0.75rem;
     width: 100%;
     border: none;
