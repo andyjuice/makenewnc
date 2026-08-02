@@ -163,3 +163,26 @@ default, so the actual hit target was only as wide as the title text.
 Changed `.ctpt-link` to `display: flex; align-items: center; min-height:
 44px;`, which (being a block-level flex container) fills the row's full
 width, so the entire visual row is now the actual tap target.
+
+## Contrast: footer campus picker in light mode
+
+The footer `CampusInstagramMenu` desktop dropdown panel renders inside
+`.social-bar` (dark navy `#0f172a`, even in light theme). A descendant
+selector `.site .social-bar a { color: #e2e8f0 }` was written for Facebook/
+YouTube links on that dark bar (~11:1 contrast). The campus picker's
+`<a class="campus-ig-menu__option">` elements are also descendants, so
+they inherited `#e2e8f0` even though their panel background is
+`var(--phone-screen)` (`#f8fafc` in light mode) — roughly **1.2:1** for
+school names, while `.campus-ig-menu__city` stayed readable because it
+sets `color: var(--muted)` explicitly.
+
+Fix (two layers):
+
+1. Scope the bar link color to **direct children only**:
+   `.site .social-bar > a`.
+2. Set `color: var(--text)` on `.campus-ig-menu__option` and
+   `.campus-ig-menu__name` so the picker never inherits ambient link
+   colors regardless of where it is mounted.
+
+Light-mode result: `#0f172a` on `#f8fafc` ≈ **13.6:1** (AA). Dark-mode
+panel (`#111` background, `#f1f5f9` text) unchanged.
