@@ -32,7 +32,7 @@ const introParagraphs = diff.intro
   <p class="page-lead" id="intro">{home.aboutIntro}</p>
 
   <section id="fart" class="about-section">
-    <h2 class="section-label">{diff.title}</h2>
+    <h2 class="fart-section-title">{diff.title}</h2>
     {diff.image && (
       <img
         class="fart-flyer"
@@ -64,6 +64,19 @@ const introParagraphs = diff.intro
 </Site>
 
 <style>
+  /* Main section heading — larger than the shared .section-label caption style
+     used on Gallery/Contact/era labels elsewhere. Keeps h2 semantics for
+     screen-reader heading navigation. */
+  .fart-section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0 0 1rem;
+    color: #047857;
+  }
+  :global(.site--dark) .fart-section-title {
+    color: var(--accent);
+  }
   .fart-flyer {
     display: block;
     width: 100%;
