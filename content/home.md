@@ -8,6 +8,37 @@ aboutTitle: "What we're about"
 aboutIntro: >
   [make]new is church for people who don't like church — casual, thoughtful,
   and built around college life in the Triangle.
+differentiator:
+  title: "What makes us different"
+  acronym: FART
+  intro: >
+    Tongue-in-cheek, but it sums up how we're different from a typical church.
+    These aren't our values (see below) — they're the modes we use to reach people.
+  items:
+    - letter: F
+      word: Faith
+      summary: The gospel is the basis of everything we do.
+      body: >
+        We care about the gospel — it's not one item on a list, it's the
+        foundation. Everything else flows from that.
+    - letter: A
+      word: Art
+      summary: Creativity as a way to reach people.
+      body: >
+        Art, music, and creative expression are ways we connect with people
+        who might never walk into a traditional church building.
+    - letter: R
+      word: Reason
+      summary: College-level seriousness about faith questions.
+      body: >
+        We use reason and intellectual rigor to explore Christianity — asking
+        hard questions and taking answers seriously.
+    - letter: T
+      word: Technology
+      summary: Meeting people where they already are.
+      body: >
+        Technology is another mode for reaching people — online community,
+        digital tools, and platforms people already use every day.
 characteristics:
   - id: tagline
     phrase: "is a church for people who don't like church"

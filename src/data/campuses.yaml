@@ -12,6 +12,9 @@ campuses:
     university: Duke University
     city: Durham
     status: active
+    contact:
+      phone: "(919) 407-8578"
+      email: makenewchurch@gmail.com
     instagram: https://www.instagram.com/nc.makenew/
     description: >
       Our original campus — a Duke-focused church. During the semester we meet
@@ -47,6 +50,9 @@ campuses:
     university: North Carolina State University
     city: Raleigh
     status: active
+    contact:
+      phone: "(919) 407-8578"
+      email: makenewchurch@gmail.com
     instagram: https://www.instagram.com/ncsu.makenew/
     description: >
       [make]new at NC State — a college-focused campus ministry in Raleigh.
@@ -58,6 +64,9 @@ campuses:
     university: UNC Chapel Hill
     city: Chapel Hill
     status: active
+    contact:
+      phone: "(919) 407-8578"
+      email: makenewchurch@gmail.com
     instagram: https://www.instagram.com/unc.makenew/
     description: >
       [make]new at UNC Chapel Hill — a college-focused campus ministry.

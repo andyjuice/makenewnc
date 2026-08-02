@@ -18,7 +18,8 @@ Astro site for [make]new church. **Instagram Gateway** is the production design 
 | Top bar / popup | `src/data/announcements.yaml` |
 | Brand, social, contact | `src/data/site.yaml` |
 | Campuses | `src/data/campuses.yaml` |
-| Hero characteristics + pillars | `content/home.md` |
+| Campus galleries | `src/data/campus-carousels.yaml` + `public/images/locations/{slug}/` |
+| Hero characteristics + pillars + FART | `content/home.md` |
 | Home carousel (images + links) | `src/data/carousel.yaml` + `public/images/carousel/` |
 | Story, beliefs, CTPT | `content/*.md` |
 

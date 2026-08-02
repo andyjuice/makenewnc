@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 533" role="img" aria-label="NC State gallery placeholder 1">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#cc0000"/>
+      <stop offset="100%" stop-color="#8b0000"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="533" fill="url(#bg)"/>
+  <text x="200" y="260" fill="#ffd6d6" font-family="system-ui,sans-serif" font-size="16" font-weight="600" text-anchor="middle">NC State gallery</text>
+  <text x="200" y="290" fill="#ffb3b3" font-family="system-ui,sans-serif" font-size="13" text-anchor="middle">Drop photos here</text>
+</svg>

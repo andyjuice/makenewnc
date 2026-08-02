@@ -1,12 +1,14 @@
 ---
 /**
  * What we're about — casual practical-values page from home.md pillars.
+ * Includes the FART differentiator (Faith, Art, Reason, Technology).
  */
 import Site from '../layouts/Site.astro';
 import { getHome, getSite } from '../lib/content';
 
 const home = getHome();
 const site = getSite();
+const diff = home.differentiator;
 ---
 
 <Site title={home.aboutTitle} scrollable>
@@ -18,6 +20,33 @@ const site = getSite();
     <p>
       <strong>{home.brand}</strong> — {home.tagline}
     </p>
+  </section>
+
+  <section id="fart" class="about-section">
+    <p class="section-label">{diff.title}</p>
+    <p class="about-summary">
+      <span class="fart-acronym" aria-label={diff.acronym.split('').join(' ')}>{diff.acronym}</span>
+      — {diff.intro}
+    </p>
+    <dl class="fart-list">
+      {diff.items.map((item) => (
+        <div class="fart-item" id={`fart-${item.word.toLowerCase()}`}>
+          <dt class="fart-item__term">
+            <span class="fart-item__letter" aria-hidden="true">{item.letter}</span>
+            {item.word}
+          </dt>
+          <dd class="fart-item__def">
+            <p class="about-summary">{item.summary}</p>
+            <p>{item.body}</p>
+          </dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <section id="values" class="about-section">
+    <p class="section-label">Our values</p>
+    <p class="about-summary">The practical values that shape how we live together.</p>
   </section>
 
   {home.pillars.map((pillar) => (
@@ -33,3 +62,52 @@ const site = getSite();
     <p>{site.instagramPitch}</p>
   </section>
 </Site>
+
+<style>
+  .fart-acronym {
+    font-weight: 800;
+    letter-spacing: 0.06em;
+  }
+  .fart-list {
+    margin: 1rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1.25rem;
+  }
+  .fart-item {
+    margin: 0;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .fart-item__term {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 0.5rem;
+    font-size: 1.125rem;
+    font-weight: 700;
+  }
+  .fart-item__letter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 6px;
+    background: var(--accent);
+    color: #0a0a0a;
+    font-size: 0.875rem;
+    font-weight: 800;
+  }
+  :global(.site--dark) .fart-item__letter {
+    background: var(--accent);
+    color: #0a0a0a;
+  }
+  .fart-item__def {
+    margin: 0;
+  }
+  .fart-item__def p:last-child {
+    margin-bottom: 0;
+  }
+</style>

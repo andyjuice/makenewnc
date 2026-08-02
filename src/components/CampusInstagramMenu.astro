@@ -1,7 +1,9 @@
 ---
 /**
- * CampusInstagramMenu — opens a campus picker for Instagram profiles.
- * Used on the home CTA and footer social bar; depends on campuses.yaml via getCampuses().
+ * CampusInstagramMenu — campus picker for Instagram profiles.
+ * Desktop: dropdown panel anchored to the trigger.
+ * Mobile (<640px): fixed bottom sheet dialog with large touch targets and focus trap.
+ * Depends on campuses.yaml via getCampuses().
  */
 import type { Campus } from '../lib/content';
 
@@ -14,12 +16,15 @@ interface Props {
 const { campuses, variant = 'primary', instanceId = 'default' } = Astro.props;
 const triggerId = `campus-ig-menu-trigger-${instanceId}`;
 const panelId = `campus-ig-menu-panel-${instanceId}`;
+const sheetId = `campus-ig-menu-sheet-${instanceId}`;
 const isFooter = variant === 'footer';
+const isPrimary = variant === 'primary';
 ---
 
 <div
-  class:list={['campus-ig-menu', { 'campus-ig-menu--footer': isFooter }]}
+  class:list={['campus-ig-menu', { 'campus-ig-menu--footer': isFooter, 'campus-ig-menu--primary': isPrimary }]}
   data-campus-ig-menu
+  data-variant={variant}
 >
   <button
     type="button"
@@ -28,12 +33,43 @@ const isFooter = variant === 'footer';
       isFooter ? 'campus-ig-menu__trigger--footer social-bar__ig' : 'gateway__ig',
     ]}
     aria-expanded="false"
-    aria-haspopup="menu"
-    aria-controls={panelId}
+    aria-haspopup="dialog"
+    aria-controls={sheetId}
     id={triggerId}
   >
     {isFooter ? 'Instagram' : 'Follow us on Instagram'}
   </button>
+
+  <div
+    id={sheetId}
+    class="campus-ig-menu__sheet"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby={`${sheetId}-title`}
+    hidden
+  >
+    <div class="campus-ig-menu__sheet-backdrop" data-sheet-backdrop tabindex="-1" aria-hidden="true"></div>
+    <div class="campus-ig-menu__sheet-panel">
+      <p id={`${sheetId}-title`} class="campus-ig-menu__label">Choose a campus</p>
+      <div class="campus-ig-menu__mobile-buttons" role="group" aria-label="Choose a campus">
+        {campuses.map((campus) => (
+          <a
+            href={campus.instagram}
+            class="campus-ig-menu__mobile-btn gateway__ig campus-ig-btn"
+            data-campus={campus.slug}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="campus-ig-menu__name">{campus.name}</span>
+            <span class="campus-ig-menu__city">{campus.city}</span>
+          </a>
+        ))}
+      </div>
+      <button type="button" class="campus-ig-menu__back" data-sheet-close>
+        Cancel
+      </button>
+    </div>
+  </div>
 
   <div
     id={panelId}
@@ -64,23 +100,40 @@ const isFooter = variant === 'footer';
 </div>
 
 <script>
+  const MOBILE_SHEET_MQ = '(max-width: 639px)';
+
   function closeCampusIgMenus(except?: Element) {
     document.querySelectorAll('[data-campus-ig-menu]').forEach((root) => {
       if (root === except) return;
       const trigger = root.querySelector('.campus-ig-menu__trigger');
       const panel = root.querySelector('.campus-ig-menu__panel');
-      if (!(trigger instanceof HTMLButtonElement) || !(panel instanceof HTMLElement)) return;
+      const sheet = root.querySelector('.campus-ig-menu__sheet');
+      if (!(trigger instanceof HTMLButtonElement)) return;
       trigger.setAttribute('aria-expanded', 'false');
-      panel.setAttribute('hidden', '');
+      if (panel instanceof HTMLElement) panel.setAttribute('hidden', '');
+      if (sheet instanceof HTMLElement) {
+        sheet.setAttribute('hidden', '');
+        document.body.classList.remove('campus-ig-sheet-open');
+      }
     });
   }
 
   document.querySelectorAll('[data-campus-ig-menu]').forEach((root) => {
     const trigger = root.querySelector('.campus-ig-menu__trigger');
     const panel = root.querySelector('.campus-ig-menu__panel');
-    if (!(trigger instanceof HTMLButtonElement) || !(panel instanceof HTMLElement)) return;
+    const sheet = root.querySelector('.campus-ig-menu__sheet');
+    const backdrop = root.querySelector('[data-sheet-backdrop]');
+    const closeButtons = root.querySelectorAll('[data-sheet-close]');
+    if (!(trigger instanceof HTMLButtonElement) || !(panel instanceof HTMLElement) || !(sheet instanceof HTMLElement)) return;
 
-    function setOpen(open: boolean) {
+    const mobileMq = window.matchMedia(MOBILE_SHEET_MQ);
+    let lastFocused: HTMLElement | null = null;
+
+    function usesMobileSheet() {
+      return mobileMq.matches;
+    }
+
+    function setPanelOpen(open: boolean) {
       if (open) closeCampusIgMenus(root);
       trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
       if (open) {
@@ -90,29 +143,115 @@ const isFooter = variant === 'footer';
       }
     }
 
+    function getFocusableInSheet() {
+      return [...sheet.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      )].filter((el) => !el.closest('[hidden]'));
+    }
+
+    function setSheetOpen(open: boolean) {
+      if (open) closeCampusIgMenus(root);
+      trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open) {
+        lastFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+        sheet.removeAttribute('hidden');
+        document.body.classList.add('campus-ig-sheet-open');
+        const focusable = getFocusableInSheet();
+        (focusable[0] ?? sheet).focus();
+      } else {
+        sheet.setAttribute('hidden', '');
+        document.body.classList.remove('campus-ig-sheet-open');
+        (lastFocused ?? trigger).focus();
+        lastFocused = null;
+      }
+    }
+
     function isOpen() {
       return trigger.getAttribute('aria-expanded') === 'true';
     }
 
-    trigger.addEventListener('click', () => {
-      setOpen(!isOpen());
+    function closeAll() {
+      setPanelOpen(false);
+      setSheetOpen(false);
+    }
+
+    function openPicker() {
+      if (usesMobileSheet()) {
+        setSheetOpen(true);
+      } else {
+        setPanelOpen(true);
+      }
+    }
+
+    function togglePicker() {
+      if (isOpen()) {
+        closeAll();
+      } else {
+        openPicker();
+      }
+    }
+
+    function syncViewportMode() {
+      if (!isOpen()) return;
+      closeAll();
+    }
+
+    trigger.addEventListener('click', togglePicker);
+
+    closeButtons.forEach((btn) => {
+      btn.addEventListener('click', () => setSheetOpen(false));
     });
 
+    if (backdrop instanceof HTMLElement) {
+      backdrop.addEventListener('click', () => setSheetOpen(false));
+    }
+
     document.addEventListener('click', (event) => {
-      if (!isOpen()) return;
+      if (!isOpen() || usesMobileSheet()) return;
       const target = event.target;
-      if (target instanceof Node && !root.contains(target)) setOpen(false);
+      if (target instanceof Node && !root.contains(target)) setPanelOpen(false);
     });
 
     document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && isOpen()) {
-        setOpen(false);
-        trigger.focus();
+      if (!isOpen()) return;
+
+      if (event.key === 'Escape') {
+        closeAll();
+        return;
+      }
+
+      if (!usesMobileSheet() || event.key !== 'Tab') return;
+
+      const focusable = getFocusableInSheet();
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+
+      if (event.shiftKey && active === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
       }
     });
 
     panel.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', () => setOpen(false));
+      link.addEventListener('click', () => setPanelOpen(false));
     });
+
+    sheet.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => setSheetOpen(false));
+    });
+
+    mobileMq.addEventListener('change', syncViewportMode);
   });
 </script>
+
+<style>
+  :global(body.campus-ig-sheet-open) {
+    overflow: hidden;
+  }
+</style>

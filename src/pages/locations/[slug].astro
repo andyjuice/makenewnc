@@ -1,9 +1,10 @@
 ---
 /**
- * Campus detail — service times, address, and description per location.
+ * Campus detail — service times, address, gallery carousel, and contact per location.
  */
 import Site from '../../layouts/Site.astro';
-import { getCampuses, getSite, siteLink } from '../../lib/content';
+import CardHandCarousel from '../../components/CardHandCarousel.astro';
+import { getCampuses, getCampusCarouselCards, getSite, siteLink } from '../../lib/content';
 
 export function getStaticPaths() {
   return getCampuses().map((campus) => ({
@@ -14,6 +15,7 @@ export function getStaticPaths() {
 
 const { campus } = Astro.props;
 const site = getSite();
+const carouselCards = getCampusCarouselCards(campus.slug);
 const friday = campus.services?.friday;
 const sunday = campus.services?.sunday;
 ---
@@ -22,7 +24,13 @@ const sunday = campus.services?.sunday;
   <a href={siteLink('/locations')} class="back-link">← All locations</a>
 
   <h1 class="page-title">{campus.name}</h1>
-  <p class="section-label">{campus.university}</p>
+
+  {carouselCards.length > 0 && (
+    <section class="campus-gallery" aria-label={`${campus.name} photo gallery`}>
+      <p class="section-label">Gallery</p>
+      <CardHandCarousel cards={carouselCards} />
+    </section>
+  )}
 
   <p class="page-lead">{campus.description}</p>
 
@@ -36,6 +44,21 @@ const sunday = campus.services?.sunday;
       {campus.address.street}, {campus.address.city} {campus.address.state}
       {campus.address.note && ` · ${campus.address.note}`}
     </a>
+  )}
+
+  {campus.contact && (
+    <div class="campus-contact">
+      <p class="section-label">Contact</p>
+      <p class="campus-contact__details">
+        <a href={`tel:${campus.contact.phone.replace(/[^\d+]/g, '')}`} class="campus-contact__link">
+          {campus.contact.phone}
+        </a>
+        <span class="campus-contact__sep" aria-hidden="true"> · </span>
+        <a href={`mailto:${campus.contact.email}`} class="campus-contact__link">
+          {campus.contact.email}
+        </a>
+      </p>
+    </div>
   )}
 
   {friday && sunday && (

@@ -27,9 +27,9 @@ Production home and site IA for [make]new. Locked design — see `decisions/2026
 1. **Hero:** static `[make]new` brand with Duke · NC State · UNC on the same line; cycling characteristics from `content/home.md` → `/about#{anchor}`; mobility address includes a `*` footnote for Duke-only service times
 2. **Carousel:** stacked card deck (4 visible in hand); `src/data/carousel.yaml` + `public/images/carousel/`
 3. **IG hover:** replaced by optional external-link button when a card has `link` in `carousel.yaml`
-4. **Follow CTA:** home button and footer Instagram link open a campus picker (Duke, NC State, UNC)
+4. **Follow CTA:** home button opens a campus picker (Duke, NC State, UNC) — fixed bottom sheet on viewports &lt;640px; dropdown on wider screens. Footer Instagram uses the same picker.
 5. **Locations line:** link to campus picker
-6. **Footer links:** Locations · Beliefs · Story · About · CTPT
+6. **Footer links:** Home · Locations · Beliefs · Story · About · CTPT
 
 `prefers-reduced-motion`: freeze tagline on first characteristic.
 
@@ -44,14 +44,14 @@ Production home and site IA for [make]new. Locked design — see `decisions/2026
 
 - Index at `/locations` lists Duke, NC State, and UNC — cards link to per-campus detail pages
 - Hover states use each school’s brand colors (Duke blue, NC State red, Carolina blue)
-- Per-campus pages show address, Fri/Sun services when available, and link to that campus’s Instagram profile
+- Per-campus pages show address, contact, gallery carousel, Fri/Sun services when available, and link to that campus's Instagram profile
 - Data in `src/data/campuses.yaml`
 - Events route redirects to Locations
 
 ## About page
 
 - Route: `/what-were-about`
-- Sections: intro, 4 pillars (anchored), always-on (from `instagramPitch`)
+- Sections: intro, FART differentiator (Faith, Art, Reason, Technology), 4 pillars (anchored), always-on (from `instagramPitch`)
 - Tone: casual practical values, not formal beliefs
 
 ## Carousel
