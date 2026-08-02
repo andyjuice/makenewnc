@@ -6,39 +6,65 @@ heroImage: /images/hero-poster.svg
 showHeroVideo: false
 aboutTitle: "What we're about"
 aboutIntro: >
-  [make]new is church for people who don't like church — casual, thoughtful,
-  and built around college life in the Triangle.
+  [make]new is church for people who don't like church. Built around college
+  life in the Triangle. Open 24/7.
+# FART is the "how we reach people" layer of the About page. Its four cards
+# intentionally absorbed the old standalone "Intellectual rigor" pillar (now
+# folded into Reason, below) so the page stops repeating itself — see
+# decisions/2026-08-02-about-page-fart-rework.md.
 differentiator:
-  title: "What makes us different"
+  title: "Come FART with us"
   acronym: FART
-  intro: >
-    Tongue-in-cheek, but it sums up how we're different from a typical church.
-    These aren't our values (see below) — they're the modes we use to reach people.
+  # Context copy shown once, above the four cards. Rendered as separate
+  # paragraphs by src/pages/what-were-about.astro (split on blank lines).
+  intro: |
+    Yes, we know it's immature. But we have your attention now, don't we?
+
+    Despite what the title might suggest, we're not actually interested in your ability to flatulate. FART is an easy-to-remember acronym for the four things that shape everything we do — the stuff that makes us distinctly [make]new.
   items:
     - letter: F
       word: Faith
       summary: The gospel is the basis of everything we do.
       body: >
-        We care about the gospel — it's not one item on a list, it's the
-        foundation. Everything else flows from that.
+        Okay, this one isn't revolutionary — we believe the gospel is the
+        foundation for everything we do. It's not one item on a list;
+        everything else flows from it.
     - letter: A
       word: Art
-      summary: Creativity as a way to reach people.
+      summary: Creativity that speaks to the human experience.
       body: >
-        Art, music, and creative expression are ways we connect with people
-        who might never walk into a traditional church building.
+        Art — film, music, literature, any form of creative expression —
+        shapes people's values and speaks to something past rote reason: the
+        human experience itself, in ways words alone can't always capture.
+        That's why we engage with art from all kinds of artists, most of them
+        not Christian, as a way to share the gospel. On any given Friday,
+        expect skits, music, and film that connect the human experience to
+        the Christian worldview.
     - letter: R
       word: Reason
       summary: College-level seriousness about faith questions.
+      # Contains inline HTML (rendered via set:html in what-were-about.astro):
+      # an <abbr> definition tooltip for "apologetics" and a link to /christian-themes-for-privileged-teens (CTPT),
+      # so the Reason claim is backed by something concrete instead of just asserted.
       body: >
-        We use reason and intellectual rigor to explore Christianity — asking
-        hard questions and taking answers seriously.
+        College is when a lot of people start asking the big questions for
+        the first time, and "just believe" isn't a good enough answer. We
+        think faith should hold up to scrutiny, so we dig into the hard
+        stuff — the problem of suffering, the historicity of the Bible,
+        whether a fine-tuned universe points to a Creator. That's
+        <abbr title="Apologetics: giving reasoned answers in defense of the Christian faith.">apologetics</abbr>
+        in practice, and it's why we built
+        <a href="/christian-themes-for-privileged-teens">CTPT</a>, our free
+        series working through Christianity's toughest questions.
     - letter: T
       word: Technology
-      summary: Meeting people where they already are.
+      summary: Tech-forward, and paying attention to right now.
       body: >
-        Technology is another mode for reaching people — online community,
-        digital tools, and platforms people already use every day.
+        We're constantly experimenting with new technology in our Friday
+        productions — from the tools on stage to how we tell a story. That
+        same curiosity extends to current events, because the gospel isn't
+        just for people in ancient Judea. It has something to say about
+        today, too.
 characteristics:
   - id: tagline
     phrase: "is a church for people who don't like church"
@@ -55,7 +81,9 @@ characteristics:
   - id: rigor
     phrase: "approaches Christianity with college-level rigor"
     holdMs: 4000
-    aboutAnchor: intellectual-rigor
+    # Points at the FART "Reason" card, not a standalone pillar — see the
+    # differentiator.items note above on why Intellectual rigor was folded in.
+    aboutAnchor: fart-reason
   - id: always-on
     phrase: "is open 24/7"
     holdMs: 4000
@@ -73,14 +101,6 @@ pillars:
       address (except for tax purposes) but a community of God's people
       worshipping together. A more practical reason for meeting in a dance
       studio? Owning a building is expensive.
-  - title: Intellectual rigor
-    slug: intellectual-rigor
-    summary: College-level seriousness about faith questions.
-    body: >
-      College is a formative time — when many people develop core pieces of
-      their identity. We take questions seriously: telling someone to "just
-      believe" is dumb. Join us for [make]new Fridays where we explore topics
-      from the fine-tuned universe to the historicity of the Bible.
   - title: Living life together
     slug: living-life-together
     summary: The Gospel has real implications for how we live.

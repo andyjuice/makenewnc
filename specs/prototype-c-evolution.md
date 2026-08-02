@@ -51,8 +51,14 @@ Production home and site IA for [make]new. Locked design — see `decisions/2026
 ## About page
 
 - Route: `/what-were-about`
-- Sections: intro, FART differentiator (Faith, Art, Reason, Technology), 4 pillars (anchored), always-on (from `instagramPitch`)
+- Sections: subheader (single "who we are" statement — no separate intro
+  section), FART differentiator (Faith, Art, Reason, Technology; anchored
+  `#fart-{word}`), 3 pillars (anchored), always-on (from `instagramPitch`)
 - Tone: casual practical values, not formal beliefs
+- See `specs/about-page-fart-rework.md` and `architecture/about-page-fart-rework.md`
+  for the 2026-08-02 de-duplication pass (removed the redundant "Who we are"
+  section and the "Intellectual rigor" pillar, which duplicated FART's
+  Reason card)
 
 ## Carousel
 

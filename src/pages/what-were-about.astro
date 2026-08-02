@@ -2,6 +2,14 @@
 /**
  * What we're about — casual practical-values page from home.md pillars.
  * Includes the FART differentiator (Faith, Art, Reason, Technology).
+ *
+ * Structure (see specs/what-were-about.md for the full rationale):
+ *   1. Title + subheader (subheader alone carries the "who we are" framing —
+ *      there is deliberately no separate "Who we are" section anymore).
+ *   2. FART — "Come FART with us": context copy, then four cards.
+ *   3. Our values — the remaining pillars from home.md that FART doesn't
+ *      already cover (Mobility, Living life together, Sharing the Gospel).
+ *   4. Always on — Instagram pitch.
  */
 import Site from '../layouts/Site.astro';
 import { getHome, getSite } from '../lib/content';
@@ -9,25 +17,30 @@ import { getHome, getSite } from '../lib/content';
 const home = getHome();
 const site = getSite();
 const diff = home.differentiator;
+
+// diff.intro is authored as one or more blank-line-separated paragraphs in
+// content/home.md; split here so each renders as its own <p> instead of one
+// run-on block.
+const introParagraphs = diff.intro
+  .split(/\n\s*\n/)
+  .map((paragraph) => paragraph.trim())
+  .filter(Boolean);
+
+// Screen readers get the full word list ("Faith, Art, Reason, Technology")
+// instead of spelling out the letters, which is clearer than the acronym.
+const acronymLabel = diff.items.map((item) => item.word).join(', ');
 ---
 
 <Site title={home.aboutTitle} scrollable>
   <h1 class="page-title">{home.aboutTitle}</h1>
-  <p class="page-lead">{home.aboutIntro}</p>
-
-  <section id="intro" class="about-section">
-    <p class="section-label">Who we are</p>
-    <p>
-      <strong>{home.brand}</strong> — {home.tagline}
-    </p>
-  </section>
+  <p class="page-lead" id="intro">{home.aboutIntro}</p>
 
   <section id="fart" class="about-section">
     <p class="section-label">{diff.title}</p>
-    <p class="about-summary">
-      <span class="fart-acronym" aria-label={diff.acronym.split('').join(' ')}>{diff.acronym}</span>
-      — {diff.intro}
-    </p>
+    <p class="fart-acronym" aria-label={acronymLabel}>{diff.acronym}</p>
+    {introParagraphs.map((paragraph) => (
+      <p class="about-body">{paragraph}</p>
+    ))}
     <dl class="fart-list">
       {diff.items.map((item) => (
         <div class="fart-item" id={`fart-${item.word.toLowerCase()}`}>
@@ -37,7 +50,8 @@ const diff = home.differentiator;
           </dt>
           <dd class="fart-item__def">
             <p class="about-summary">{item.summary}</p>
-            <p>{item.body}</p>
+            {/* item.body is trusted content-authored HTML (links, <abbr> tooltips) — see DifferentiatorItem in lib/content.ts */}
+            <p class="fart-item__body" set:html={item.body} />
           </dd>
         </div>
       ))}
@@ -65,11 +79,20 @@ const diff = home.differentiator;
 
 <style>
   .fart-acronym {
+    margin: 0 0 1rem;
+    font-size: clamp(1.75rem, 6vw, 2.25rem);
     font-weight: 800;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
+  }
+  .about-body {
+    margin: 0 0 0.75rem;
+    color: var(--muted);
+  }
+  .about-body:last-of-type {
+    margin-bottom: 1.5rem;
   }
   .fart-list {
-    margin: 1rem 0 0;
+    margin: 0;
     padding: 0;
     display: grid;
     gap: 1.25rem;
@@ -107,7 +130,25 @@ const diff = home.differentiator;
   .fart-item__def {
     margin: 0;
   }
-  .fart-item__def p:last-child {
-    margin-bottom: 0;
+  /* Typography hierarchy: letter (above) > summary (.about-summary, bold) >
+     body (below, subdued + smaller) — the extended description is
+     supporting detail, not a second headline. */
+  .fart-item__body {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+  .fart-item__body :global(abbr) {
+    text-decoration: underline dotted;
+    text-decoration-color: var(--muted);
+    cursor: help;
+  }
+  .fart-item__body :global(a) {
+    color: var(--text);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
   }
 </style>

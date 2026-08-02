@@ -33,7 +33,8 @@ site.yaml     → getSite() (brand, social, contact)
 ```
 content/home.md → getHome()
   ├── characteristics[] → GatewayTagline
-  └── pillars[]         → about.astro sections
+  ├── differentiator    → what-were-about.astro FART section (see architecture/about-page-fart-rework.md)
+  └── pillars[]         → what-were-about.astro "Our values" sections
 
 carousel.yaml + public/images/carousel/ → getCarouselCards() → CardHandCarousel
 ```
