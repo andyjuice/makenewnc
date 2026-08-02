@@ -46,7 +46,11 @@ pages, and a couple of **link-identifiability** issues.
   theme variables and component styles. Everything except the Instagram
   gradient CTA (see below) already passed AA (4.5:1 text / 3:1 large text
   and UI components), several with wide margins (e.g. `--muted` on `--bg`
-  is 4.76:1 light / 7.72:1 dark).
+  is 4.76:1 light / 7.72:1 dark). **Follow-up (same day):** the footer
+  campus-picker dropdown in light mode was missed — nested `<a>` tags inside
+  `.social-bar` inherited the bar's `#e2e8f0` link color onto the light
+  panel background; fixed by scoping the bar rule to direct children and
+  setting explicit picker text colors.
 - **Zoom/pinch-zoom**: viewport meta already omits `user-scalable=no` /
   `maximum-scale` — correctly does not disable zoom.
 - **Forms**: none exist on the site (grepped for `<form>`/`<input>`/
@@ -99,7 +103,12 @@ behind each fix. Summary:
    link, CTPT chapter links, carousel card external-link icon).
 9. Drawer nav had no way to tell which page you're currently on — added
    `aria-current="page"`.
-10. CSS transitions/animations sitewide weren't gated by
+10. Footer campus-picker panel in **light mode**: school names inherited
+    `#e2e8f0` from `.social-bar a` (intended for the dark bar only) onto
+    the white popup surface (~1.2:1 contrast). Scoped bar link color to
+    direct children and set explicit `var(--text)` on picker options
+    (`Site.astro`).
+11. CSS transitions/animations sitewide weren't gated by
     `prefers-reduced-motion` (only the JS-driven auto-advance behaviors
     were) — added a standard blanket CSS override, plus a matching JS
     timing fix in `CardHandCarousel` so the fix doesn't introduce an
