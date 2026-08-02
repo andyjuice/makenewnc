@@ -338,6 +338,8 @@ function isCurrentNavLink(href: string) {
     --border: #e2e8f0;
     --phone-screen: #f8fafc;
     --font: 'Space Grotesk', system-ui, sans-serif;
+    /* Fallback first for older WebKit that can't resolve min() inside var(). */
+    --drawer-w: 88vw;
     --drawer-w: min(17.5rem, 88vw);
     margin: 0;
     background: var(--bg);
@@ -395,12 +397,17 @@ function isCurrentNavLink(href: string) {
   .site .header__icon { display: block; }
   .site .header__icon[hidden] { display: none; }
 
-  /* Push drawer — lives below header; shifts page content left */
+  /* Push drawer — lives below header; shifts page content left.
+     When open, the drawer must sit *above* the sliding stage on iOS Safari:
+     WebKit keeps a full-width compositor layer for the transformed stage and
+     can paint it over the drawer panel beneath, hiding link text while
+     borders/focus rings still peek through. */
   .site .shell {
     position: relative;
     flex: 1;
     overflow: hidden;
     min-height: 0;
+    isolation: isolate;
   }
   .site .shell__stage {
     position: relative;
@@ -413,7 +420,7 @@ function isCurrentNavLink(href: string) {
     flex-direction: column;
   }
   .site .shell--drawer-open .shell__stage {
-    transform: translateX(calc(-1 * var(--drawer-w)));
+    transform: translate3d(calc(-1 * var(--drawer-w)), 0, 0);
   }
 
   .site .drawer {
@@ -432,23 +439,28 @@ function isCurrentNavLink(href: string) {
     border-left: 1px solid var(--border);
     background: var(--bg);
     overflow-y: auto;
-    transform: translateX(100%);
+    transform: translate3d(100%, 0, 0);
     transition: transform 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .site .shell--drawer-open .drawer {
+    z-index: 3;
   }
   .site--dark .drawer { background: #111; }
   .site .drawer[hidden] { display: none; }
-  .site .drawer.drawer--open { transform: translateX(0); }
+  .site .drawer.drawer--open { transform: translate3d(0, 0, 0); }
   .site .drawer a {
     padding: 0.875rem 0;
     text-decoration: none;
-    color: var(--text);
+    color: #0f172a;
+    -webkit-text-fill-color: currentColor;
     min-height: 44px;
     display: flex;
     align-items: center;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 1rem;
     border-bottom: 1px solid var(--border);
   }
+  .site--dark .drawer a { color: #f1f5f9; }
   .site .drawer a:last-child { border-bottom: none; }
   .site .drawer a:hover { color: var(--accent); }
   .site .drawer a[aria-current="page"] {
