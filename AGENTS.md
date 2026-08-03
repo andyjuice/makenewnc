@@ -24,7 +24,7 @@ Astro site for [make]new church. **Instagram Gateway** is the production design 
 | Story, beliefs, CTPT | `content/*.md` |
 | Favicon / tab icon | `public/images/makenew-icon.png` + `scripts/generate-favicons.py` (see `docs/favicon.md`) |
 | SEO meta descriptions | `seoDescription` in `content/*.md` frontmatter (see `docs/cloudflare-seo-checklist.md`) |
-| Social share image | `public/images/og-default.jpg` (1200×630; falls back to logo) |
+| Social share image | `public/images/og-default.jpg` (1200×630; run `scripts/generate-og-image.py` after logo changes) |
 
 ## Commands
 
