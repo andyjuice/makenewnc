@@ -23,6 +23,8 @@ Astro site for [make]new church. **Instagram Gateway** is the production design 
 | Home carousel (images + links) | `src/data/carousel.yaml` + `public/images/carousel/` |
 | Story, beliefs, CTPT | `content/*.md` |
 | Favicon / tab icon | `public/images/makenew-icon.png` + `scripts/generate-favicons.py` (see `docs/favicon.md`) |
+| SEO meta descriptions | `seoDescription` in `content/*.md` frontmatter (see `docs/cloudflare-seo-checklist.md`) |
+| Social share image | `public/images/og-default.jpg` (1200×630; falls back to logo) |
 
 ## Commands
 

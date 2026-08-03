@@ -12,6 +12,10 @@ description: >
   for a university educated audience (i.e. it has memes), CTPT explores concepts
   such as science and faith, the problem of suffering, and the historicity of
   the Bible.
+seoDescription: >
+  CTPT (Christian Themes for Privileged Teens) — a free series on the
+  intellectual foundations of Christianity for a university-educated audience.
+  Science, suffering, the Bible, and more.
 chapters:
   - title: "Chapter 1: Who cares"
     subtitle: Why should I even entertain questions about God?

@@ -1,12 +1,12 @@
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://makenewnc.org',
+  site: 'https://www.makenewnc.org',
   compressHTML: true,
+  integrations: [sitemap()],
   redirects: {
     // WordPress legacy paths
-    '/messages': '/',
-    '/messages/': '/',
     '/our-pastor': '/our-story',
     '/our-pastor/': '/our-story',
     '/privacy-policy': '/privacy',

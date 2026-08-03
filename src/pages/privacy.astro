@@ -1,13 +1,17 @@
 ---
 import Site from '../layouts/Site.astro';
-import { getPrivacyTitle, getPrivacyBody } from '../lib/content';
+import { getPrivacy, getPrivacyBody } from '../lib/content';
 
-const title = getPrivacyTitle();
+const privacy = getPrivacy();
 const body = getPrivacyBody();
 ---
 
-<Site title={title} scrollable>
-  <h1 class="page-title">{title}</h1>
+<Site
+  title={privacy.title}
+  description={privacy.seoDescription}
+  scrollable
+>
+  <h1 class="page-title">{privacy.title}</h1>
   {body.split('\n\n').map((p) => <p>{p}</p>)}
   <p><a href="/" class="back-link">← Back to [make]new</a></p>
 </Site>

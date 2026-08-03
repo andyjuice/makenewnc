@@ -5,7 +5,7 @@ import { getStory } from '../lib/content';
 const story = getStory();
 ---
 
-<Site title="Our Story" scrollable>
+<Site title={story.title} description={story.seoDescription ?? story.teaser} scrollable>
   <h1 class="page-title">{story.title}</h1>
   <p class="page-lead">{story.teaser}</p>
   {story.sections.map((s) => (

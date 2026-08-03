@@ -1,5 +1,8 @@
 ---
 title: Our Beliefs
+seoDescription: >
+  [make]new's statement of faith — one God, salvation through Jesus Christ,
+  and the gospel as the church's primary mission.
 summary: >
   The Holy Bible is the inspired word of God and is the basis of our
   statement of faith.
