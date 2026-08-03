@@ -1,5 +1,9 @@
 ---
 title: Our Story
+seoDescription: >
+  How [make]new started as a creative arts fellowship at UC Berkeley in 2012
+  and grew into a Triangle-wide college church — Duke in Durham since 2017,
+  plus NC State and UNC campuses.
 teaser: >
   From a creative arts fellowship at UC Berkeley in 2012 to a Triangle-wide
   campus ministry — Duke in Durham since 2017, and now UNC and NC State.

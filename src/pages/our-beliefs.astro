@@ -5,7 +5,7 @@ import { getBeliefs } from '../lib/content';
 const beliefs = getBeliefs();
 ---
 
-<Site title="Our Beliefs" scrollable>
+<Site title={beliefs.title} description={beliefs.seoDescription ?? beliefs.summary} scrollable>
   <h1 class="page-title">{beliefs.title}</h1>
   <p style="font-size:0.9375rem">{beliefs.summary}</p>
   {beliefs.body.split('\n\n').map((para) => <p style="font-size:0.9375rem">{para}</p>)}

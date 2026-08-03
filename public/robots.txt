@@ -1,0 +1,5 @@
+# [make]new — allow all crawlers; sitemap generated at build time by @astrojs/sitemap.
+User-agent: *
+Allow: /
+
+Sitemap: https://www.makenewnc.org/sitemap-index.xml

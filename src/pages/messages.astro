@@ -1,0 +1,33 @@
+---
+/**
+ * Messages — sermon/talk recordings live on Facebook; stub preserves the
+ * legacy /messages URL for SEO and bookmarks after the WordPress migration.
+ */
+import Site from '../layouts/Site.astro';
+import { getMessages } from '../lib/content';
+
+const messages = getMessages();
+const paragraphs = messages.body
+  .split('\n\n')
+  .map((paragraph) => paragraph.trim())
+  .filter(Boolean);
+---
+
+<Site
+  title={messages.title}
+  description={messages.seoDescription}
+  scrollable
+>
+  <h1 class="page-title">{messages.title}</h1>
+  {paragraphs.map((paragraph) => (
+    <p class="page-lead">{paragraph}</p>
+  ))}
+  <a
+    href={messages.facebookUrl}
+    class="gateway__ig"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Watch on Facebook<span class="visually-hidden"> (opens in new tab)</span>
+  </a>
+</Site>

@@ -5,7 +5,7 @@ import { getCtpt } from '../lib/content';
 const ctpt = getCtpt();
 ---
 
-<Site title={ctpt.title} scrollable>
+<Site title={ctpt.title} description={ctpt.seoDescription ?? ctpt.description} scrollable>
   <h1 class="page-title">{ctpt.title}</h1>
   <p class="page-lead">{ctpt.description}</p>
   <ul class="minimal-list">

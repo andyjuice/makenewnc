@@ -6,61 +6,61 @@
 #
 # Fields per card:
 #   image — filename in public/images/carousel/  OR  site path starting with /
-#   alt   — short description (required; used by screen readers)
+#   alt   — short description (required; screen readers + image search SEO)
 #   link  — optional URL; when set, the front card shows an external-link button
 
 cards:
   - image: makenew-friday.jpg
-    alt: "[make]new Friday"
+    alt: "[make]new Friday gathering — college students at an intellectual talk in Durham"
     link: https://www.instagram.com/nc.makenew
   - image: coffee.jpg
-    alt: Coffee
+    alt: "[make]new community coffee hangout in the Triangle"
     link: https://www.instagram.com/nc.makenew
   - image: pickleball.jpg
-    alt: Pickleball
+    alt: "[make]new students playing pickleball together"
     link: https://www.instagram.com/nc.makenew
   - image: waiter-skit.jpg
-    alt: Waiter skit
+    alt: "Creative arts skit at a [make]new Friday gathering"
     link: https://www.instagram.com/nc.makenew
   - image: rc-cars.jpg
-    alt: RC cars
+    alt: "RC car activity at [make]new college church"
     link: https://www.instagram.com/nc.makenew
   - image: creme-brulee.jpg
-    alt: Crème brûlée
+    alt: "Dessert and fellowship at [make]new Durham"
     link: https://www.instagram.com/nc.makenew
   - image: lawn-mower-skit.jpg
-    alt: Lawn mower skit
+    alt: "Humorous skit performance at [make]new Friday"
     link: https://www.instagram.com/nc.makenew
   - image: paint-night.jpg
-    alt: Paint night
+    alt: "[make]new paint night community event"
     link: https://www.instagram.com/nc.makenew
   - image: thanksgiving.jpg
-    alt: Thanksgiving
+    alt: "[make]new Thanksgiving gathering with college students"
     link: https://www.instagram.com/nc.makenew
   - image: nerf-guns.jpg
-    alt: Nerf guns
+    alt: "Nerf battle social at [make]new campus ministry"
     link: https://www.instagram.com/nc.makenew
   - image: caprisun-for-a-flyer.jpg
-    alt: Caprisun for a flyer
+    alt: "[make]new outreach — Capri Sun for a flyer on Duke campus"
     link: https://www.instagram.com/nc.makenew
   - image: fire-pit.jpg
-    alt: Fire pit
+    alt: "Fire pit fellowship at [make]new church community"
     link: https://www.instagram.com/nc.makenew
   - image: inbox-outbox.jpg
-    alt: Inbox outbox
+    alt: "[make]new creative arts production still"
     link: https://www.instagram.com/nc.makenew
   - image: labor-day-bbq.jpg
-    alt: Labor Day BBQ
+    alt: "[make]new Labor Day BBQ with Triangle college students"
     link: https://www.instagram.com/nc.makenew
   - image: poker-demo.jpg
-    alt: Poker demo
+    alt: "Demonstration talk at [make]new Friday gathering"
     link: https://www.instagram.com/nc.makenew
   - image: thanksgiving-2.jpg
-    alt: Thanksgiving gathering
+    alt: "[make]new Thanksgiving community dinner in Durham"
     link: https://www.instagram.com/nc.makenew
   - image: soccer-film.jpg
-    alt: Soccer film
+    alt: "Film and discussion at [make]new college ministry"
     link: https://www.instagram.com/nc.makenew
   - image: tote-bag.jpg
-    alt: Tote bag
+    alt: "[make]new branded tote bags at a campus event"
     link: https://www.instagram.com/nc.makenew

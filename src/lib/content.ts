@@ -139,11 +139,14 @@ export type HomeContent = {
   differentiator: Differentiator;
   characteristics: Characteristic[];
   cta: { heading: string; text: string; link: string };
+  seoDescription?: string;
+  seoIntro?: string;
 };
 
 export type StoryContent = {
   title: string;
   teaser: string;
+  seoDescription?: string;
   sections: { era: string; body: string }[];
   gallery: string[];
 };
@@ -151,6 +154,7 @@ export type StoryContent = {
 export type BeliefsContent = {
   title: string;
   summary: string;
+  seoDescription?: string;
   body: string;
   bullets: string[];
 };
@@ -166,7 +170,20 @@ export type CtptContent = {
   shortTitle: string;
   intro: string;
   description: string;
+  seoDescription?: string;
   chapters: CtptChapter[];
+};
+
+export type MessagesContent = {
+  title: string;
+  seoDescription?: string;
+  body: string;
+  facebookUrl: string;
+};
+
+export type PrivacyContent = {
+  title: string;
+  seoDescription?: string;
 };
 
 /** One slide in the home card-hand carousel (from src/data/carousel.yaml). */
@@ -259,8 +276,16 @@ export function getCtpt(): CtptContent {
   return readMd<CtptContent>(path.join(contentRoot, 'ctpt.md'));
 }
 
+export function getMessages(): MessagesContent {
+  return readMd<MessagesContent>(path.join(contentRoot, 'messages.md'));
+}
+
+export function getPrivacy(): PrivacyContent {
+  return readMd<PrivacyContent>(path.join(contentRoot, 'privacy.md'));
+}
+
 export function getPrivacyTitle(): string {
-  return readMd<{ title: string }>(path.join(contentRoot, 'privacy.md')).title;
+  return getPrivacy().title;
 }
 
 export function getPrivacyBody(): string {

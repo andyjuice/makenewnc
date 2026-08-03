@@ -3,7 +3,7 @@ import Site from '../layouts/Site.astro';
 import GatewayTagline from '../components/GatewayTagline.astro';
 import CardHandCarousel from '../components/CardHandCarousel.astro';
 import CampusInstagramMenu from '../components/CampusInstagramMenu.astro';
-import { getHome, getCarouselCards, getCampuses } from '../lib/content';
+import { getHome, getCarouselCards, getCampuses, siteLink } from '../lib/content';
 
 const home = getHome();
 const campuses = getCampuses();
@@ -11,7 +11,11 @@ const carouselCards = getCarouselCards();
 const campusLabels = campuses.map(({ slug, name }) => ({ slug, name }));
 ---
 
-<Site title="Home" home>
+<Site
+  title="Home"
+  description={home.seoDescription ?? home.tagline}
+  home
+>
   <Fragment slot="head">
     {carouselCards.slice(0, 4).map((card) => (
       <link rel="preload" as="image" href={card.imageUrl} />
@@ -34,4 +38,44 @@ const campusLabels = campuses.map(({ slug, name }) => ({ slug, name }));
       <CampusInstagramMenu campuses={campuses} instanceId="home" />
     </div>
   </div>
+
+  {home.seoIntro && (
+    <section class="home-seo-intro" aria-label="About [make]new">
+      <p>{home.seoIntro}</p>
+      <p>
+        <a href={siteLink('/what-were-about')}>What we're about</a>
+        {' · '}
+        <a href={siteLink('/locations')}>Locations &amp; times</a>
+        {' · '}
+        <a href={siteLink('/our-story')}>Our story</a>
+      </p>
+    </section>
+  )}
 </Site>
+
+<style>
+  .home-seo-intro {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    max-width: 36rem;
+    font-size: 0.9375rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .home-seo-intro p {
+    margin: 0 0 0.75rem;
+  }
+  .home-seo-intro a {
+    color: var(--text);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  @media (min-width: 640px) {
+    .home-seo-intro {
+      grid-column: 1 / -1;
+      max-width: none;
+    }
+  }
+</style>

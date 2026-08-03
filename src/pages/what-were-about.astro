@@ -27,7 +27,11 @@ const introParagraphs = diff.intro
   .filter(Boolean);
 ---
 
-<Site title={home.aboutTitle} scrollable>
+<Site
+  title={home.aboutTitle}
+  description={home.seoDescription ?? home.aboutIntro}
+  scrollable
+>
   <h1 class="page-title">{home.aboutTitle}</h1>
   <p class="page-lead" id="intro">{home.aboutIntro}</p>
 

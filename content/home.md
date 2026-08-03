@@ -2,6 +2,17 @@
 title: Home
 brand: "[make]new"
 tagline: "church for people who don't like church"
+seoDescription: >
+  [make]new is a college church in the Triangle — Durham, Raleigh, and Chapel
+  Hill. Church for people who don't like church. Friday talks and Sunday worship
+  near Duke University.
+seoIntro: >
+  [make]new is church for people who don't like church — a college-focused
+  ministry in the North Carolina Triangle with campuses at Duke (Durham), NC
+  State (Raleigh), and UNC Chapel Hill. We meet in a dance studio on Broad
+  Street during the semester, approach Christianity with college-level rigor,
+  and stay open 24/7 beyond Sunday morning. Explore our story, beliefs, and
+  locations to learn more or plan a visit.
 heroImage: /images/hero-poster.svg
 showHeroVideo: false
 aboutTitle: "What we're about"

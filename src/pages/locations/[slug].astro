@@ -5,6 +5,11 @@
 import Site from '../../layouts/Site.astro';
 import CardHandCarousel from '../../components/CardHandCarousel.astro';
 import { getCampuses, getCampusCarouselCards, getSite, siteLink } from '../../lib/content';
+import {
+  buildCampusEventJsonLd,
+  buildCampusPlaceJsonLd,
+  campusMetaDescription,
+} from '../../lib/seo';
 
 export function getStaticPaths() {
   return getCampuses().map((campus) => ({
@@ -18,9 +23,18 @@ const site = getSite();
 const carouselCards = getCampusCarouselCards(campus.slug);
 const friday = campus.services?.friday;
 const sunday = campus.services?.sunday;
+const campusJsonLd = [
+  buildCampusPlaceJsonLd(campus, site),
+  ...buildCampusEventJsonLd(campus, site),
+];
 ---
 
-<Site title={`${campus.name} · Locations`} scrollable>
+<Site
+  title={`${campus.name} · Locations`}
+  description={campusMetaDescription(campus)}
+  jsonLd={campusJsonLd}
+  scrollable
+>
   <a href={siteLink('/locations')} class="back-link">← All locations</a>
 
   <h1 class="page-title">{campus.name}</h1>
