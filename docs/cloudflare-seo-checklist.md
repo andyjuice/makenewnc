@@ -59,64 +59,103 @@ Cloudflare will usually add a DNS record for you automatically:
 
 ---
 
-## Part 2 — Make the bare domain (no www) forward to www
+## Part 2 — Make `makenewnc.org` forward to `www.makenewnc.org`
 
-This is the “apex redirect” step.
+Cloudflare **often does not** show a “Redirect to www” button when you add the bare domain. That’s normal. You create a **Redirect Rule** instead (takes about 2 minutes).
 
-### Why bother?
+### Before you start — DNS check
 
-Without this, some people bookmark or Google might use `https://makenewnc.org` and others `https://www.makenewnc.org`. Search engines can treat those as duplicates. The redirect makes everyone land on one address.
+The bare domain must exist in DNS with the **orange cloud ON** (proxied):
 
-### Step 3: Create a redirect rule in Cloudflare
+1. Cloudflare home → click **`makenewnc.org`** (the domain, not Pages)  
+2. **DNS** → **Records**  
+3. Look for a row where **Name** is **`@`** (that means the bare domain)
 
-1. In Cloudflare dashboard, select your domain **`makenewnc.org`** (click the domain name on the home screen — not the Pages project)  
-2. Left sidebar → **Rules** → **Redirect Rules**  
-3. Click **Create rule**  
-4. **Rule name:** `Bare domain to www` (any label is fine)
+| If you see… | Do this |
+|-------------|---------|
+| **No `@` record** | Pages → your project → **Custom domains** → add **`makenewnc.org`** (no www). Cloudflare should create DNS for you. You do **not** need a redirect checkbox. |
+| **`@` record exists, grey cloud** | Click the cloud so it turns **orange** (proxied). Redirect rules only work when proxied. |
+| **`@` already points to Pages and shows the site** | That’s OK — add the Redirect Rule below anyway; it runs before the site is served. |
 
-**When incoming requests match…**
+---
 
-- Field: **Hostname**  
-- Operator: **equals**  
-- Value: **`makenewnc.org`** (no `https://`, no `www`, no path)
+### Step 3: Create the redirect rule (recommended method — wildcard)
 
-**Then…**
+1. Cloudflare home → click **`makenewnc.org`**  
+2. Left sidebar → **Rules**  
+3. Click **Redirect Rules** (under Rules, not “Page Rules”)  
+4. Click **Create rule** (or **+ Create rule**)
 
-- Type: **Dynamic**  
-- Expression:  
-  ```
-  concat("https://www.makenewnc.org", http.request.uri.path)
-  ```
-- Status code: **301** (permanent redirect)  
-- Preserve query string: **ON** (if you see this option)
+**Rule name:** `Bare domain to www`
 
-5. **Deploy** / **Save**
+**When incoming requests match** — choose **Wildcard pattern** (not “Custom filter” unless you prefer that):
 
-### Step 4: DNS for the bare domain (if redirect doesn’t work yet)
+| Field | Value |
+|-------|-------|
+| **Request URL** | `https://makenewnc.org/*` |
 
-The bare domain also needs to point at Cloudflare so the redirect rule can run.
+**Then** — URL redirect:
 
-1. Go to **DNS** → **Records** for `makenewnc.org`  
-2. You should have (Cloudflare often adds these):
+| Field | Value |
+|-------|-------|
+| **Type** | Static (wildcard) — *not* Dynamic, for this method* |
+| **Target URL** | `https://www.makenewnc.org/${1}` |
+| **Status code** | **301** |
+| **Preserve query string** | **ON** / checked |
 
-| Type | Name | Content | Proxy |
-|------|------|---------|-------|
-| CNAME | `www` | `your-project.pages.dev` | Proxied (orange cloud) |
-| A or CNAME | `@` | Cloudflare Pages or placeholder | Proxied |
+\*If your UI only shows “Dynamic”, use Method B below instead.
 
-If there is **no** record for `@` (that’s the bare domain), add one per Cloudflare’s Pages custom-domain wizard, or use the **CNAME flattening** / **A record** Cloudflare suggests when you add the apex domain in Pages.
+5. Click **Deploy** (top right)
 
-**Alternative (simpler in some accounts):** On the Pages project → **Custom domains**, also add **`makenewnc.org`** (without www). Cloudflare may offer “Redirect to www” during setup — accept that if offered.
+**Optional second rule for HTTP:** Repeat with Request URL `http://makenewnc.org/*` → same target. Or turn on **Always Use HTTPS** in Part 3 (usually enough).
 
-### Step 5: Test the redirect (no terminal required)
+---
 
-Open a browser in a **private/incognito** window:
+### Method B — if you don’t see “Wildcard pattern”
+
+Use **Custom filter expression** (or the visual builder):
+
+**When incoming requests match:**
+
+| Field | Operator | Value |
+|-------|----------|-------|
+| Hostname | equals | `makenewnc.org` |
+
+**Then:**
+
+| Field | Value |
+|-------|-------|
+| Type | **Dynamic** |
+| Expression | `concat("https://www.makenewnc.org", http.request.uri.path)` |
+| Status code | **301** |
+| Preserve query string | **ON** |
+
+Deploy the rule.
+
+---
+
+### Step 4: Test (no terminal needed)
+
+Open a **private/incognito** browser window:
 
 1. Go to `https://makenewnc.org`  
 2. The address bar should change to `https://www.makenewnc.org`  
-3. Try `https://makenewnc.org/our-story` — should land on `https://www.makenewnc.org/our-story/`
+3. Try `https://makenewnc.org/our-story` → should land on `https://www.makenewnc.org/our-story/`
 
-If the bare domain shows an error or a different site, the DNS or redirect rule isn’t finished yet — wait for DNS or re-check Part 2.
+**If it doesn’t redirect:**
+
+- Wait 5–10 minutes and try again (rules can take a moment)  
+- Confirm the Redirect Rule shows **Active** under Rules → Redirect Rules  
+- Confirm DNS has `@` with **orange cloud**  
+- Confirm you edited rules on **`makenewnc.org`**, not a different zone
+
+---
+
+### What if adding `makenewnc.org` in Pages made the site load on both addresses?
+
+That’s fine short-term. The Redirect Rule still sends bare-domain visitors to www. Long-term you want only **www** serving the site and **bare domain** only redirecting — the rule above does that.
+
+**Do not** use “Page Rules” (older feature) unless Redirect Rules aren’t available on your plan — Redirect Rules are the current approach.
 
 ---
 
