@@ -116,6 +116,11 @@ const deckJson = JSON.stringify({ cards });
       });
     }
 
+  /** @param {EventTarget | null} target */
+    function isCardLinkTarget(target) {
+      return target instanceof Element && target.closest('.photo-stack__card-link');
+    }
+
     function setCardLink(article, card, layer) {
       const existing = article.querySelector('.photo-stack__card-link');
       if (layer !== 0 || !card.link) {
@@ -136,6 +141,10 @@ const deckJson = JSON.stringify({ cards });
           <polyline points="15 3 21 3 21 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           <line x1="10" y1="14" x2="21" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>`;
+        // Swipe-to-advance captures pointer events on the front card; stop
+        // propagation so link taps navigate instead of starting a drag.
+        link.addEventListener('pointerdown', (e) => e.stopPropagation());
+        link.addEventListener('click', (e) => e.stopPropagation());
         article.appendChild(link);
       }
     }
@@ -266,6 +275,7 @@ const deckJson = JSON.stringify({ cards });
 
       front.onpointerdown = (e) => {
         if (e.button !== 0) return;
+        if (isCardLinkTarget(e.target)) return;
         paused = true;
         clearAuto();
         dragState = { startX: e.clientX, el: front, active: false, pointerId: e.pointerId };
@@ -447,6 +457,8 @@ const deckJson = JSON.stringify({ cards });
     position: absolute;
     top: 0.65rem;
     right: 0.65rem;
+    z-index: 2;
+    pointer-events: auto;
     display: flex;
     align-items: center;
     justify-content: center;
