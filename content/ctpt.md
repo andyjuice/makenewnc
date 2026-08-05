@@ -30,18 +30,24 @@ chapters:
     subtitle: How can we know?
     url: "https://docs.google.com/document/d/1qlts8NkT6LGyT7X3hhYHPrk2EJHZftQ1WcnNE3XeH9w/edit?usp=drive_link"
   - title: "Chapter 4: Missing God"
-    subtitle: ""
+    subtitle: Why wouldn't a good and loving God stop suffering?
     url: "https://docs.google.com/document/d/1PBWFbzawXpl5LMQI72z2xRBIVXGKDS0G61WKUp38NNU/edit?usp=drive_link"
-  - title: "Chapter 5: Finding God"
-    subtitle: ""
+  - title: "Chapter 4 appendix: First Sin"
+    subtitle: Why sin and separation from God permeate our lives
     url: "https://docs.google.com/document/d/1bHN3rnV5otU5HpQTyaFSYkTdv-PQiSQvxoKzLuwEeNM/edit?usp=drive_link"
-  - title: "Chapter 6: Heaven and Hell"
-    subtitle: ""
+  - title: "Chapter 5: Finding God"
+    subtitle: Why doesn't God just reveal himself?
     url: "https://docs.google.com/document/d/1rCDX-JH7TVZwzma-pdNxFKighpFTPqsf68FsCxsxQzo/edit?usp=drive_link"
-  - title: "Chapter 7: Jesus and the Cross"
-    subtitle: ""
+  - title: "Chapter 5 appendix: Resurrection WLC"
+    subtitle: Supplement on the resurrection (PDF)
+    url: "https://drive.google.com/file/d/1CPSO-X1vl59W8U5PLoc5VlLcImHC2t9k/view?usp=drive_link"
+  - title: "Chapter 6: Heaven and Hell"
+    subtitle: What hell really is and how we sometimes choose it
     url: "https://docs.google.com/document/d/1DkD49K0JnRsT08qzIJutv4290eI_m_gind-31SgOFG0/edit?usp=drive_link"
-  - title: "Chapter 8: Decisions"
-    subtitle: ""
+  - title: "Chapter 7: Jesus and the Cross"
+    subtitle: The central figure and event of Christianity
     url: "https://docs.google.com/document/d/1NryjSuI2bEVWCQYK4lzGyhWBYX3XyIvvTnSN7cNgB84/edit?usp=drive_link"
+  - title: "Chapter 8: Decisions"
+    subtitle: What to do with everything you've read
+    url: "https://docs.google.com/document/d/1ViUP9aWa4yalaXGbX6e6ExYHOUxc2e628HNWq8Wd36w/edit?usp=drive_link"
 ---
