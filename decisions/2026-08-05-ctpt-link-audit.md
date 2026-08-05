@@ -21,6 +21,7 @@ new doc URLs.
   scope for this content correction.
 - **Add Table of Contents doc to index:** Present in Drive but not on legacy WP
   accordion; omitted to keep parity with the established chapter list.
+- **Add Chapter 5.a PDF appendix:** Added after Chapter 5 (Drive PDF, not a Google Doc).
 
 ## Tradeoffs
 
